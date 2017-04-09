@@ -32,16 +32,16 @@ class Keys extends Command
 
         $content = file_get_contents(base_path('.env'));
 
-        if (strpos($content, 'QUARX_API_TOKEN=') > -1) {
-            $content = str_replace('QUARX_API_TOKEN=', 'QUARX_API_TOKEN='.$keyOne, $content);
+        if (strpos($content, 'SIRAVEL_API_TOKEN=') > -1) {
+            $content = str_replace('SIRAVEL_API_TOKEN=', 'SIRAVEL_API_TOKEN='.$keyOne, $content);
         } else {
-            $content .= "\nQUARX_API_TOKEN=".$keyOne;
+            $content .= "\nSIRAVEL_API_TOKEN=".$keyOne;
         }
 
-        if (strpos($content, 'QUARX_API_KEY=') > -1) {
-            $content = str_replace('QUARX_API_KEY=', 'QUARX_API_KEY='.$keyTwo, $content)."\n";
+        if (strpos($content, 'SIRAVEL_API_KEY=') > -1) {
+            $content = str_replace('SIRAVEL_API_KEY=', 'SIRAVEL_API_KEY='.$keyTwo, $content)."\n";
         } else {
-            $content .= "\nQUARX_API_KEY=".$keyTwo."\n";
+            $content .= "\nSIRAVEL_API_KEY=".$keyTwo."\n";
         }
 
         file_put_contents(base_path('.env'), $content);
