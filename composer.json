@@ -53,10 +53,7 @@
         "phpspec/phpspec": "~3.0",
         "symfony/dom-crawler": "~3.0",
         "symfony/css-selector": "~3.0",
-        "mikey179/vfsStream": "^1.6",
-        "barryvdh/laravel-ide-helper": "dev-master",
-
-        "barryvdh/laravel-debugbar": "dev-master"
+        "mikey179/vfsStream": "^1.6"
     },
     "autoload": {
         "psr-4": {

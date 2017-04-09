@@ -148,8 +148,6 @@ class SiravelProvider extends ServiceProvider
         $this->app->register(\Amranidev\ScaffoldInterface\ScaffoldInterfaceServiceProvider::class);
         // Enquete
         $this->app->register(\Inani\Larapoll\LarapollServiceProvider::class);
-        // Debug Bar
-        $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
         /*
          * Criptografia
          */
