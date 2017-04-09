@@ -1,4 +1,4 @@
-@extends('quarx::layouts.dashboard')
+@extends('siravel::layouts.dashboard')
 
 @section('content')
 
@@ -6,16 +6,16 @@
         <h1 class="page-header">Events</h1>
     </div>
 
-    @include('quarx::modules.events.breadcrumbs', ['location' => ['create']])
+    @include('siravel::modules.events.breadcrumbs', ['location' => ['create']])
 
     <div class="row">
-        {!! Form::open(['route' => 'quarx.events.store', 'class' => 'add']) !!}
+        {!! Form::open(['route' => 'siravel.events.store', 'class' => 'add']) !!}
 
-            {!! FormMaker::fromTable('events', Config::get('quarx.forms.event')) !!}
+            {!! FormMaker::fromTable('events', Config::get('siravel.forms.event')) !!}
 
             <div class="form-group text-right">
-                <a href="{!! URL::to('quarx/events') !!}" class="btn btn-default raw-left">Cancel</a>
-                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+                <a href="{!! URL::to('siravel/events') !!}" class="btn btn-default raw-left">{!! trans('siravel::modules.cancel') !!}</a>
+                {!! Form::submit(trans('siravel::modules.save'), ['class' => 'btn btn-primary']) !!}
             </div>
 
         {!! Form::close() !!}

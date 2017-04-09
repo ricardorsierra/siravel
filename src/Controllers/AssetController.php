@@ -1,10 +1,10 @@
 <?php
 
-namespace Yab\Quarx\Controllers;
+namespace Sitec\Siravel\Controllers;
 
 use App;
 use Image;
-use Quarx;
+use Siravel;
 use Exception;
 use SplFileInfo;
 use Illuminate\Filesystem\Filesystem;
@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
-use Yab\Quarx\Facades\CryptoServiceFacade;
+use Sitec\Siravel\Facades\CryptoServiceFacade;
 
-class AssetController extends QuarxController
+class AssetController extends SiravelController
 {
     protected $mimeTypes;
 
@@ -35,10 +35,10 @@ class AssetController extends QuarxController
         try {
             $fileName = CryptoServiceFacade::url_decode($encFileName);
 
-            if (Config::get('quarx.storage-location') === 'local' || Config::get('quarx.storage-location') === null) {
+            if (Config::get('siravel.storage-location') === 'local' || Config::get('siravel.storage-location') === null) {
                 $filePath = storage_path('app/'.$fileName);
             } else {
-                $filePath = Storage::disk(Config::get('quarx.storage-location', 'local'))->url($fileName);
+                $filePath = Storage::disk(Config::get('siravel.storage-location', 'local'))->url($fileName);
             }
 
             $fileTool = new SplFileInfo($filePath);
@@ -47,10 +47,10 @@ class AssetController extends QuarxController
 
             $headers = ['Content-Type' => $contentType];
 
-            if (Config::get('quarx.storage-location') === 'local' || Config::get('quarx.storage-location') === null) {
+            if (Config::get('siravel.storage-location') === 'local' || Config::get('siravel.storage-location') === null) {
                 return response()->download($filePath, basename($filePath), $headers);
             } else {
-                $fileContent = Storage::disk(Config::get('quarx.storage-location', 'local'))->get($fileName);
+                $fileContent = Storage::disk(Config::get('siravel.storage-location', 'local'))->get($fileName);
 
                 return Response::make($fileContent, 200, [
                     'Content-Type' => $contentType,
@@ -74,12 +74,12 @@ class AssetController extends QuarxController
         try {
             $fileName = CryptoServiceFacade::url_decode($encFileName);
 
-            if (Config::get('quarx.storage-location') === 'local' || Config::get('quarx.storage-location') === null) {
+            if (Config::get('siravel.storage-location') === 'local' || Config::get('siravel.storage-location') === null) {
                 $filePath = storage_path('app/'.$fileName);
                 $contentType = $fileSystem->mimeType($filePath);
                 $ext = '.'.strtoupper($fileSystem->extension($filePath));
             } else {
-                $filePath = Storage::disk(Config::get('quarx.storage-location', 'local'))->url($fileName);
+                $filePath = Storage::disk(Config::get('siravel.storage-location', 'local'))->url($fileName);
                 $fileTool = new SplFileInfo($filePath);
                 $ext = $fileTool->getExtension();
                 $contentType = $this->getMimeType($ext);
@@ -87,10 +87,10 @@ class AssetController extends QuarxController
 
             if (stristr($contentType, 'image')) {
                 $headers = ['Content-Type' => $contentType];
-                if (Config::get('quarx.storage-location') === 'local' || Config::get('quarx.storage-location') === null) {
+                if (Config::get('siravel.storage-location') === 'local' || Config::get('siravel.storage-location') === null) {
                     return response()->download($filePath, basename($filePath), $headers);
                 } else {
-                    $fileContent = Storage::disk(Config::get('quarx.storage-location', 'local'))->get($fileName);
+                    $fileContent = Storage::disk(Config::get('siravel.storage-location', 'local'))->get($fileName);
 
                     return Response::make($fileContent, 200, [
                         'Content-Type' => $contentType,
@@ -131,10 +131,10 @@ class AssetController extends QuarxController
             $fileName = CryptoServiceFacade::url_decode($encFileName);
             $realFileName = CryptoServiceFacade::url_decode($encRealFileName);
 
-            if (Config::get('quarx.storage-location') === 'local' || Config::get('quarx.storage-location') === null) {
+            if (Config::get('siravel.storage-location') === 'local' || Config::get('siravel.storage-location') === null) {
                 $filePath = storage_path('app/'.$realFileName);
             } else {
-                $filePath = Storage::disk(Config::get('quarx.storage-location', 'local'))->url($realFileName);
+                $filePath = Storage::disk(Config::get('siravel.storage-location', 'local'))->url($realFileName);
             }
 
             $fileTool = new SplFileInfo($filePath);
@@ -143,10 +143,10 @@ class AssetController extends QuarxController
 
             $headers = ['Content-Type' => $contentType];
 
-            if (Config::get('quarx.storage-location') === 'local' || Config::get('quarx.storage-location') === null) {
+            if (Config::get('siravel.storage-location') === 'local' || Config::get('siravel.storage-location') === null) {
                 return response()->download($filePath, basename($filePath), $headers);
             } else {
-                $fileContent = Storage::disk(Config::get('quarx.storage-location', 'local'))->get($realFileName);
+                $fileContent = Storage::disk(Config::get('siravel.storage-location', 'local'))->get($realFileName);
 
                 return Response::make($fileContent, 200, [
                     'Content-Type' => $contentType,
@@ -154,7 +154,7 @@ class AssetController extends QuarxController
                 ]);
             }
         } catch (Exception $e) {
-            Quarx::notification('We encountered an error with that file', 'danger');
+            Siravel::notification('We encountered an error with that file', 'danger');
 
             return redirect('errors/general');
         }

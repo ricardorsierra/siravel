@@ -1,12 +1,12 @@
 <?php
 
-namespace Yab\Quarx\Console;
+namespace Sitec\Siravel\Console;
 
 use Artisan;
 use Config;
 use Exception;
 use Illuminate\Console\Command;
-use Yab\CrudMaker\Generators\CrudGenerator;
+use Sitec\CrudMaker\Generators\CrudGenerator;
 
 class ModuleMake extends Command
 {
@@ -22,7 +22,7 @@ class ModuleMake extends Command
      *
      * @var string
      */
-    protected $description = 'Generate a module for Quarx';
+    protected $description = 'Generate a module for Siravel';
 
     /**
      * Generate a CRUD stack.
@@ -35,14 +35,14 @@ class ModuleMake extends Command
 
         $name = ucfirst(str_singular($this->argument('name')));
 
-        $moduleDirectory = base_path('quarx/modules/'.ucfirst(str_plural($name)));
+        $moduleDirectory = base_path('siravel/modules/'.ucfirst(str_plural($name)));
 
-        if (!is_dir(base_path('quarx'))) {
-            @mkdir(base_path('quarx'));
+        if (!is_dir(base_path('siravel'))) {
+            @mkdir(base_path('siravel'));
         }
 
-        if (!is_dir(base_path('quarx/modules'))) {
-            @mkdir(base_path('quarx/modules'));
+        if (!is_dir(base_path('siravel/modules'))) {
+            @mkdir(base_path('siravel/modules'));
         }
 
         @mkdir($moduleDirectory);
@@ -50,7 +50,7 @@ class ModuleMake extends Command
         @mkdir($moduleDirectory.'/Publishes');
         @mkdir($moduleDirectory.'/Publishes/app/Http', 0777, true);
         @mkdir($moduleDirectory.'/Publishes/routes', 0777, true);
-        @mkdir($moduleDirectory.'/Publishes/app/Http/Controllers/Quarx', 0777, true);
+        @mkdir($moduleDirectory.'/Publishes/app/Http/Controllers/Siravel', 0777, true);
         @mkdir($moduleDirectory.'/Publishes/resources/themes/default', 0777, true);
         @mkdir($moduleDirectory.'/Controllers');
         @mkdir($moduleDirectory.'/Services');
@@ -59,7 +59,7 @@ class ModuleMake extends Command
         @mkdir($moduleDirectory.'/Tests');
 
         file_put_contents($moduleDirectory.'/config.php', "<?php \n\n\n return [ 'asset_path' => __DIR__.'/Assets', 'url' => '".strtolower(str_plural($name))."', ];");
-        file_put_contents($moduleDirectory.'/Views/menu.blade.php', "<li class=\"@if (Request::is('quarx/".strtolower(str_plural($name))."') || Request::is('quarx/".strtolower(str_plural($name))."/*')) active @endif\"><a href=\"{{ url('quarx/".strtolower(str_plural($name))."') }}\"><span class=\"fa fa-file\"></span> ".ucfirst(str_plural($name)).'</a></li>');
+        file_put_contents($moduleDirectory.'/Views/menu.blade.php', "<li class=\"@if (Request::is('siravel/".strtolower(str_plural($name))."') || Request::is('siravel/".strtolower(str_plural($name))."/*')) active @endif\"><a href=\"{{ url('siravel/".strtolower(str_plural($name))."') }}\"><span class=\"fa fa-file\"></span> ".ucfirst(str_plural($name)).'</a></li>');
 
         $config = [
             'bootstrap' => false,
@@ -69,11 +69,11 @@ class ModuleMake extends Command
             '_path_views_' => $moduleDirectory.'/Views',
             '_path_tests_' => $moduleDirectory.'/Tests',
             '_path_routes_' => $moduleDirectory.'/Routes/web.php',
-            'routes_prefix' => "<?php \n\nRoute::group(['namespace' => 'Quarx\Modules\\".ucfirst(str_plural($name))."\Controllers', 'prefix' => 'quarx', 'middleware' => ['web', 'auth', 'quarx']], function () { \n\n",
+            'routes_prefix' => "<?php \n\nRoute::group(['namespace' => 'Siravel\Modules\\".ucfirst(str_plural($name))."\Controllers', 'prefix' => 'siravel', 'middleware' => ['web', 'auth', 'siravel']], function () { \n\n",
             'routes_suffix' => "\n\n});",
             '_app_namespace_' => app()->getInstance()->getNamespace(),
-            '_namespace_services_' => 'Quarx\Modules\\'.ucfirst(str_plural($name)).'\Services',
-            '_namespace_controller_' => 'Quarx\Modules\\'.ucfirst(str_plural($name)).'\Controllers',
+            '_namespace_services_' => 'Siravel\Modules\\'.ucfirst(str_plural($name)).'\Services',
+            '_namespace_controller_' => 'Siravel\Modules\\'.ucfirst(str_plural($name)).'\Controllers',
             '_name_name_' => strtolower($name),
             '_lower_case_' => strtolower($name),
             '_lower_casePlural_' => str_plural(strtolower($name)),
@@ -87,11 +87,11 @@ class ModuleMake extends Command
 
         $appConfig = $config;
         $appConfig['template_source'] = __DIR__.'/../Templates/AppBasic/';
-        $appConfig['_path_controller_'] = $moduleDirectory.'/Publishes/app/Http/Controllers/Quarx';
+        $appConfig['_path_controller_'] = $moduleDirectory.'/Publishes/app/Http/Controllers/Siravel';
         $appConfig['_path_views_'] = $moduleDirectory.'/Publishes/resources/themes/default';
         $appConfig['_path_routes_'] = $moduleDirectory.'/Publishes/routes/'.$config['_lower_casePlural_'].'-web.php';
-        $appConfig['_namespace_controller_'] = $config['_app_namespace_'].'Http\Controllers\Quarx';
-        $appConfig['routes_prefix'] = "<?php \n\nRoute::group(['namespace' => 'Quarx', 'middleware' => ['web']], function () {\n\n";
+        $appConfig['_namespace_controller_'] = $config['_app_namespace_'].'Http\Controllers\Siravel';
+        $appConfig['routes_prefix'] = "<?php \n\nRoute::group(['namespace' => 'Siravel', 'middleware' => ['web']], function () {\n\n";
         $appConfig['routes_suffix'] = "\n\n});";
 
         try {

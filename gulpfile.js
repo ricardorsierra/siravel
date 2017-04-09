@@ -1,5 +1,7 @@
 var elixir = require('laravel-elixir');
 
+require('laravel-elixir-vue-2')
+
 elixir.config.publicPath = 'src/Assets/dist/';
 elixir.config.assetsPath = 'src/Assets/';
 
@@ -18,7 +20,7 @@ elixir(function(mix) {
 
     mix.scripts([
         'bootstrap.min.js',
-        'quarx.js',
+        'siravel.js',
         'forms.js',
         'typeahead.bundle.js',
         'bootstrap-tagsinput.min.js',

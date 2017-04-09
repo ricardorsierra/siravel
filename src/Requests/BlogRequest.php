@@ -1,11 +1,11 @@
 <?php
 
-namespace Yab\Quarx\Requests;
+namespace Sitec\Siravel\Requests;
 
 use Auth;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
-use Yab\Quarx\Models\Blog;
+use Sitec\Siravel\Models\Blog;
 
 class BlogRequest extends FormRequest
 {
@@ -17,7 +17,7 @@ class BlogRequest extends FormRequest
     public function authorize()
     {
         if (config('app.env') !== 'testing') {
-            return Gate::allows('quarx', Auth::user());
+            return Gate::allows('siravel', Auth::user());
         }
 
         return true;

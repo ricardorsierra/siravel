@@ -10,7 +10,7 @@ class CreateEventsTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('quarx.db-prefix', '').'events', function (Blueprint $table) {
+        Schema::create(config('siravel.db-prefix', '').'events', function (Blueprint $table) {
             $table->increments('id');
             $table->date('start_date');
             $table->date('end_date');
@@ -28,6 +28,6 @@ class CreateEventsTable extends Migration
      */
     public function down()
     {
-        Schema::drop(config('quarx.db-prefix', '').'events');
+        Schema::drop(config('siravel.db-prefix', '').'events');
     }
 }

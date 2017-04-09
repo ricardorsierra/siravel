@@ -1,21 +1,21 @@
-@extends('quarx::layouts.dashboard')
+@extends('siravel::layouts.dashboard')
 
 @section('content')
 
     <div class="row">
-        <h1 class="page-header">Blog</h1>
+        <h1 class="page-header">{!! trans('siravel::modules.blog') !!}</h1>
     </div>
 
-    @include('quarx::modules.blogs.breadcrumbs', ['location' => ['create']])
+    @include('siravel::modules.blogs.breadcrumbs', ['location' => ['create']])
 
     <div class="row">
-        {!! Form::open(['route' => 'quarx.blog.store', 'class' => 'add']) !!}
+        {!! Form::open(['route' => 'siravel.blog.store', 'class' => 'add']) !!}
 
-            {!! FormMaker::fromTable('blogs', Config::get('quarx.forms.blog')) !!}
+            {!! FormMaker::fromTable('blogs', Config::get('siravel.forms.blog')) !!}
 
             <div class="form-group text-right">
-                <a href="{!! URL::to('quarx/blog') !!}" class="btn btn-default raw-left">Cancel</a>
-                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+                <a href="{!! URL::to('siravel/blog') !!}" class="btn btn-default raw-left">{!! trans('siravel::modules.cancel') !!}</a>
+                {!! Form::submit(trans('siravel::modules.save'), ['class' => 'btn btn-primary']) !!}
             </div>
 
         {!! Form::close() !!}

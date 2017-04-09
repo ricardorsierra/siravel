@@ -1,6 +1,6 @@
 <?php
 
-namespace Yab\Quarx\Services;
+namespace Sitec\Siravel\Services;
 
 class Normalizer
 {

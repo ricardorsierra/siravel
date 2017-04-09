@@ -7,7 +7,7 @@ class PagesTest extends TestCase
         parent::setUp();
         $this->withoutMiddleware();
         $this->withoutEvents();
-        factory(\Yab\Quarx\Models\Page::class)->create();
+        factory(\Sitec\Siravel\Models\Page::class)->create();
     }
 
     /*
@@ -18,20 +18,20 @@ class PagesTest extends TestCase
 
     public function testIndex()
     {
-        $response = $this->call('GET', 'quarx/pages');
+        $response = $this->call('GET', 'siravel/pages');
         $this->assertEquals(200, $response->getStatusCode());
         $response->assertViewHas('pages');
     }
 
     public function testCreate()
     {
-        $response = $this->call('GET', 'quarx/pages/create');
+        $response = $this->call('GET', 'siravel/pages/create');
         $this->assertEquals(200, $response->getStatusCode());
     }
 
     public function testEdit()
     {
-        $response = $this->call('GET', 'quarx/pages/1/edit');
+        $response = $this->call('GET', 'siravel/pages/1/edit');
         $this->assertEquals(200, $response->getStatusCode());
         $response->assertViewHas('page');
     }
@@ -44,15 +44,15 @@ class PagesTest extends TestCase
 
     public function testStore()
     {
-        $pages = factory(\Yab\Quarx\Models\Page::class)->make(['id' => 2]);
-        $response = $this->call('POST', 'quarx/pages', $pages['attributes']);
+        $pages = factory(\Sitec\Siravel\Models\Page::class)->make(['id' => 2]);
+        $response = $this->call('POST', 'siravel/pages', $pages['attributes']);
 
         $this->assertEquals(302, $response->getStatusCode());
     }
 
     public function testSearch()
     {
-        $response = $this->call('POST', 'quarx/pages/search', ['term' => 'wtf']);
+        $response = $this->call('POST', 'siravel/pages/search', ['term' => 'wtf']);
 
         $response->assertViewHas('pages');
         $this->assertEquals(200, $response->getStatusCode());
@@ -61,9 +61,9 @@ class PagesTest extends TestCase
     public function testUpdate()
     {
         $page = ['id' => 6, 'title' => 'dumber', 'url' => 'dumber', 'entry' => 'okie dokie'];
-        $response = $this->call('POST', 'quarx/pages', $page);
+        $response = $this->call('POST', 'siravel/pages', $page);
 
-        $response = $this->call('PATCH', 'quarx/pages/6', [
+        $response = $this->call('PATCH', 'siravel/pages/6', [
             'title' => 'smarter',
             'url' => 'smart',
         ]);
@@ -75,24 +75,24 @@ class PagesTest extends TestCase
     public function testUpdateTranslation()
     {
         $page = ['id' => 6, 'title' => 'dumber', 'url' => 'dumber', 'entry' => 'okie dokie'];
-        $response = $this->call('POST', 'quarx/pages', $page);
+        $response = $this->call('POST', 'siravel/pages', $page);
 
-        $response = $this->call('PATCH', 'quarx/pages/6', [
+        $response = $this->call('PATCH', 'siravel/pages/6', [
             'title' => 'smarter',
             'url' => 'smart',
             'lang' => 'fr',
         ]);
 
         $this->assertDatabaseHas('translations', [
-            'entity_type' => 'Yab\\Quarx\\Models\\Page',
+            'entity_type' => 'Sitec\\Siravel\\Models\\Page',
         ]);
         $this->assertEquals(302, $response->getStatusCode());
     }
 
     public function testDelete()
     {
-        $response = $this->call('DELETE', 'quarx/pages/1');
+        $response = $this->call('DELETE', 'siravel/pages/1');
         $this->assertEquals(302, $response->getStatusCode());
-        $response->assertRedirect('quarx/pages');
+        $response->assertRedirect('siravel/pages');
     }
 }

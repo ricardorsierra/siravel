@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html lang="en">
+<html lang="{!! Lang::getLocale() !!}">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,11 +30,11 @@
 
         <div class="footer container-fluid navbar-fixed-bottom">
             <p class="pull-left">&copy; {{ date('Y') }}</p>
-            @can('quarx')
-                <a class="btn btn-xs btn-default pull-right" href="{{ url('quarx/dashboard') }}">Quarx</a>
-                @yield('quarx')
+            @can('siravel')
+                <a class="btn btn-xs btn-default pull-right" href="{{ url('siravel/dashboard') }}">Siravel</a>
+                @yield('siravel')
             @else
-                <a class="btn btn-xs btn-default pull-right" href="{{ url('login') }}">Login</a>
+                <a class="btn btn-xs btn-default pull-right" href="{{ url('login') }}">{!! trans('siravel::modules.login') !!}</a>
             @endcan
         </div>
 

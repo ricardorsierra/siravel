@@ -1,11 +1,11 @@
 <?php
 
-namespace Yab\Quarx\Services\Traits;
+namespace Sitec\Siravel\Services\Traits;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Yab\Quarx\Repositories\WidgetRepository;
-use Yab\Quarx\Services\FileService;
+use Sitec\Siravel\Repositories\WidgetRepository;
+use Sitec\Siravel\Services\FileService;
 
 trait DefaultModuleServiceTrait
 {
@@ -35,11 +35,11 @@ trait DefaultModuleServiceTrait
         $widget = WidgetRepository::getWidgetBySLUG($slug);
 
         if ($widget) {
-            if (Gate::allows('quarx', Auth::user())) {
-                $widget->content .= '<a href="'.url('quarx/widgets/'.$widget->id.'/edit').'" style="margin-left: 8px;" class="btn btn-xs btn-default"><span class="fa fa-pencil"></span> Edit</a>';
+            if (Gate::allows('siravel', Auth::user())) {
+                $widget->content .= '<a href="'.url('siravel/widgets/'.$widget->id.'/edit').'" style="margin-left: 8px;" class="btn btn-xs btn-default"><span class="fa fa-pencil"></span> Edit</a>';
             }
 
-            if (config('app.locale') !== config('quarx.default-language') && $widget->translation(config('app.locale'))) {
+            if (config('app.locale') !== config('siravel.default-language') && $widget->translation(config('app.locale'))) {
                 return $widget->translationData(config('app.locale'))->content;
             } else {
                 return $widget->content;
@@ -60,7 +60,7 @@ trait DefaultModuleServiceTrait
     {
         $img = '';
 
-        if ($image = app('Yab\Quarx\Models\Image')->find($id)) {
+        if ($image = app('Sitec\Siravel\Models\Image')->find($id)) {
             $img = FileService::filePreview($image->location);
         }
 
@@ -78,7 +78,7 @@ trait DefaultModuleServiceTrait
     {
         $img = '';
 
-        if ($image = app('Yab\Quarx\Models\Image')->find($id)) {
+        if ($image = app('Sitec\Siravel\Models\Image')->find($id)) {
             $img = FileService::filePreview($image->location);
         }
 

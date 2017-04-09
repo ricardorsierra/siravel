@@ -1,16 +1,16 @@
 <?php
 
-namespace Yab\Quarx\Controllers;
+namespace Sitec\Siravel\Controllers;
 
 use URL;
-use Quarx;
-use Yab\Quarx\Models\Blog;
+use Siravel;
+use Sitec\Siravel\Models\Blog;
 use Illuminate\Http\Request;
-use Yab\Quarx\Requests\BlogRequest;
-use Yab\Quarx\Services\ValidationService;
-use Yab\Quarx\Repositories\BlogRepository;
+use Sitec\Siravel\Requests\BlogRequest;
+use Sitec\Siravel\Services\ValidationService;
+use Sitec\Siravel\Repositories\BlogRepository;
 
-class BlogController extends QuarxController
+class BlogController extends SiravelController
 {
     /** @var BlogRepository */
     private $blogRepository;
@@ -29,7 +29,7 @@ class BlogController extends QuarxController
     {
         $blogs = $this->blogRepository->paginated();
 
-        return view('quarx::modules.blogs.index')
+        return view('siravel::modules.blogs.index')
             ->with('blogs', $blogs)
             ->with('pagination', $blogs->render());
     }
@@ -47,7 +47,7 @@ class BlogController extends QuarxController
 
         $result = $this->blogRepository->search($input);
 
-        return view('quarx::modules.blogs.index')
+        return view('siravel::modules.blogs.index')
             ->with('blogs', $result[0]->get())
             ->with('pagination', $result[2])
             ->with('term', $result[1]);
@@ -60,7 +60,7 @@ class BlogController extends QuarxController
      */
     public function create()
     {
-        return view('quarx::modules.blogs.create');
+        return view('siravel::modules.blogs.create');
     }
 
     /**
@@ -76,16 +76,16 @@ class BlogController extends QuarxController
 
         if (!$validation['errors']) {
             $blog = $this->blogRepository->store($request->all());
-            Quarx::notification('Blog saved successfully.', 'success');
+            Siravel::notification('Blog saved successfully.', 'success');
         } else {
             return $validation['redirect'];
         }
 
         if (!$blog) {
-            Quarx::notification('Blog could not be saved.', 'warning');
+            Siravel::notification('Blog could not be saved.', 'warning');
         }
 
-        return redirect(route('quarx.blog.edit', [$blog->id]));
+        return redirect(route('siravel.blog.edit', [$blog->id]));
     }
 
     /**
@@ -100,12 +100,12 @@ class BlogController extends QuarxController
         $blog = $this->blogRepository->findBlogById($id);
 
         if (empty($blog)) {
-            Quarx::notification('Blog not found', 'warning');
+            Siravel::notification('Blog not found', 'warning');
 
-            return redirect(route('quarx.blog.index'));
+            return redirect(route('siravel.blog.index'));
         }
 
-        return view('quarx::modules.blogs.edit')->with('blog', $blog);
+        return view('siravel::modules.blogs.edit')->with('blog', $blog);
     }
 
     /**
@@ -121,16 +121,16 @@ class BlogController extends QuarxController
         $blog = $this->blogRepository->findBlogById($id);
 
         if (empty($blog)) {
-            Quarx::notification('Blog not found', 'warning');
+            Siravel::notification('Blog not found', 'warning');
 
-            return redirect(route('quarx.blog.index'));
+            return redirect(route('siravel.blog.index'));
         }
 
         $blog = $this->blogRepository->update($blog, $request->all());
-        Quarx::notification('Blog updated successfully.', 'success');
+        Siravel::notification('Blog updated successfully.', 'success');
 
         if (!$blog) {
-            Quarx::notification('Blog could not be saved.', 'warning');
+            Siravel::notification('Blog could not be saved.', 'warning');
         }
 
         return redirect(URL::previous());
@@ -148,16 +148,16 @@ class BlogController extends QuarxController
         $blog = $this->blogRepository->findBlogById($id);
 
         if (empty($blog)) {
-            Quarx::notification('Blog not found', 'warning');
+            Siravel::notification('Blog not found', 'warning');
 
-            return redirect(route('quarx.blog.index'));
+            return redirect(route('siravel.blog.index'));
         }
 
         $blog->delete();
 
-        Quarx::notification('Blog deleted successfully.', 'success');
+        Siravel::notification('Blog deleted successfully.', 'success');
 
-        return redirect(route('quarx.blog.index'));
+        return redirect(route('siravel.blog.index'));
     }
 
     /**
@@ -171,7 +171,7 @@ class BlogController extends QuarxController
     {
         $blog = $this->blogRepository->findBlogById($id);
 
-        return view('quarx::modules.blogs.history')
+        return view('siravel::modules.blogs.history')
             ->with('blog', $blog);
     }
 }

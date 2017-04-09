@@ -1,8 +1,8 @@
 <?php
 
-namespace Yab\Quarx\Models;
+namespace Sitec\Siravel\Models;
 
-class Translation extends QuarxModel
+class Translation extends SiravelModel
 {
     public $table = 'translations';
 

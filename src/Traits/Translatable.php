@@ -1,11 +1,11 @@
 <?php
 
-namespace Yab\Quarx\Traits;
+namespace Sitec\Siravel\Traits;
 
-use Yab\Quarx\Models\Translation;
-use Yab\Quarx\Services\QuarxService;
+use Sitec\Siravel\Models\Translation;
+use Sitec\Siravel\Services\SiravelService;
 use Stichoza\GoogleTranslate\TranslateClient;
-use Yab\Quarx\Repositories\TranslationRepository;
+use Sitec\Siravel\Repositories\TranslationRepository;
 
 trait Translatable
 {
@@ -66,7 +66,7 @@ trait Translatable
      */
     public function afterCreate($payload)
     {
-        if (config('quarx.auto-translate', false)) {
+        if (config('siravel.auto-translate', false)) {
             $entry = $payload->toArray();
 
             unset($entry['created_at']);
@@ -76,9 +76,9 @@ trait Translatable
             unset($entry['published_at']);
             unset($entry['id']);
 
-            foreach (config('quarx.languages') as $code => $language) {
-                if ($code != config('quarx.default-language')) {
-                    $tr = new TranslateClient(config('quarx.default-language'), $code);
+            foreach (config('siravel.languages') as $code => $language) {
+                if ($code != config('siravel.default-language')) {
+                    $tr = new TranslateClient(config('siravel.default-language'), $code);
                     $translation = [
                         'lang' => $code,
                         'template' => 'show',
@@ -91,7 +91,7 @@ trait Translatable
                     }
 
                     if (isset($translation['url'])) {
-                        $translation['url'] = app(QuarxService::class)->convertToURL($translation['url']);
+                        $translation['url'] = app(SiravelService::class)->convertToURL($translation['url']);
                     }
 
                     $entityId = $payload->id;

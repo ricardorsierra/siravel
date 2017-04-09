@@ -1,11 +1,12 @@
 <?php
 
-namespace Yab\Quarx\Services;
+namespace Sitec\Siravel\Services;
 
+use Lang;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
-use Yab\Quarx\Repositories\EventRepository;
+use Sitec\Siravel\Repositories\EventRepository;
 
 class EventService
 {
@@ -69,17 +70,19 @@ class EventService
 
     public function asHtml($config)
     {
+        Carbon::setLocale(Lang::getLocale());
+
         $class = $config['class'];
         $dates = $config['dates'];
 
         $daysOfTheWeek = [
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-            'Saturday',
-            'Sunday',
+            trans('siravel::modules.monday'),
+            trans('siravel::modules.tuesday'),
+            trans('siravel::modules.wednesday'),
+            trans('siravel::modules.thursday'),
+            trans('siravel::modules.friday'),
+            trans('siravel::modules.saturday'),
+            trans('siravel::modules.sunday'),
         ];
 
         $output = '<table class="'.$class.'">';
@@ -101,7 +104,7 @@ class EventService
                     if (is_array($content)) {
                         $itemString = '';
                         foreach ($content as $item) {
-                            if (config('app.locale') !== config('quarx.default-language')) {
+                            if (config('app.locale') !== config('siravel.default-language')) {
                                 if ($item->translationData(config('app.locale'))) {
                                     $itemString .= '<a href="'.URL::to('events/event/'.$item->id).'">'.$item->translationData(config('app.locale'))->title.'</a><br>';
                                 }
@@ -135,8 +138,8 @@ class EventService
         $nextMonth = Carbon::create($dateArray[0], $dateArray[1], $dateArray[2])->addMonth()->toDateString();
 
         $links = '';
-        $links .= '<a class="previous '.$class.'" href="'.URL::to('events/'.$previousMonth).'">Previous Month</a>';
-        $links .= '<a class="next '.$class.'" href="'.URL::to('events/'.$nextMonth).'">Next Month</a>';
+        $links .= '<a class="previous '.$class.'" href="'.URL::to('events/'.$previousMonth).'">'.trans('siravel::modules.previousMonth').'</a>';
+        $links .= '<a class="next '.$class.'" href="'.URL::to('events/'.$nextMonth).'">'.trans('siravel::modules.nextMonth').'</a>';
 
         return $links;
     }
@@ -144,10 +147,10 @@ class EventService
     public function getTemplatesAsOptions()
     {
         $availableTemplates = ['show'];
-        $templates = glob(base_path('resources/themes/'.Config::get('quarx.frontend-theme').'/events/*'));
+        $templates = glob(base_path('resources/themes/'.Config::get('siravel.frontend-theme').'/events/*'));
 
         foreach ($templates as $template) {
-            $template = str_replace(base_path('resources/themes/'.Config::get('quarx.frontend-theme').'/events/'), '', $template);
+            $template = str_replace(base_path('resources/themes/'.Config::get('siravel.frontend-theme').'/events/'), '', $template);
             if (stristr($template, 'template')) {
                 $template = str_replace('-template.blade.php', '', $template);
                 if (!stristr($template, '.php')) {

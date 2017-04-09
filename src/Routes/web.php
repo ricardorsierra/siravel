@@ -1,171 +1,249 @@
 <?php
 
-    Route::group(['middleware' => 'web'], function () {
-        Route::get('quarx', 'QuarxFeatureController@sendHome');
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| This file is where you may define all of the routes that are handled
+| by your application. Just tell Laravel the URIs it should respond
+| to using a Closure or controller method. Build something great!
+|
+*/
 
-        /*
-        |--------------------------------------------------------------------------
-        | Set Language
-        |--------------------------------------------------------------------------
-        */
+$s = 'public.';
+Route::get('/',         ['as' => $s . 'home',   'uses' => 'PagesController@getHome']);
 
-        Route::get('quarx/language/set/{language}', 'QuarxFeatureController@setLanguage');
+$s = 'social.';
+Route::get('/social/redirect/{provider}',   ['as' => $s . 'redirect',   'uses' => 'Auth\SocialController@getSocialRedirect']);
+Route::get('/social/handle/{provider}',     ['as' => $s . 'handle',     'uses' => 'Auth\SocialController@getSocialHandle']);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Public Routes
-        |--------------------------------------------------------------------------
-        */
+Route::group(['prefix' => 'admin', 'middleware' => 'auth:administrator'], function()
+{
+    $a = 'admin.';
+    Route::get('/', ['as' => $a . 'home', 'uses' => 'Admin\AppController@dashboard']);
+    
+    Route::resource('users', 'Admin\UserController');
+    Route::resource('permissions', 'Admin\PermissionController');
+    Route::resource('roles', 'Admin\RoleController');
+});
 
-        Route::get('public-preview/{encFileName}', 'AssetController@asPreview');
-        Route::get('public-asset/{encFileName}', 'AssetController@asPublic');
-        Route::get('public-download/{encFileName}/{encRealFileName}', 'AssetController@asDownload');
+Route::group(['prefix' => 'user', 'middleware' => 'auth:user'], function()
+{
+    $a = 'user.';
+    Route::get('/', ['as' => $a . 'home', 'uses' => 'UserController@getHome']);
 
-        /*
-        |--------------------------------------------------------------------------
-        | APIs
-        |--------------------------------------------------------------------------
-        */
+    Route::group(['middleware' => 'activated'], function ()
+    {
+        $m = 'activated.';
+        Route::get('protected', ['as' => $m . 'protected', 'uses' => 'UserController@getProtected']);
+    });
 
-        Route::group(['prefix' => 'quarx/api'], function () {
-            Route::get('images/list', 'ImagesController@apiList');
-            Route::post('images/store', 'ImagesController@apiStore');
-            Route::get('files/list', 'FilesController@apiList');
+});
 
-            Route::group(['middleware' => ['quarx-api']], function () {
-                Route::get('blog', 'ApiController@all');
-                Route::get('blog/{id}', 'ApiController@find');
+Route::group(['middleware' => 'auth:all'], function()
+{
+    $a = 'authenticated.';
+    Route::get('/logout', ['as' => $a . 'logout', 'uses' => 'Auth\LoginController@logout']);
+    Route::get('/activate/{token}', ['as' => $a . 'activate', 'uses' => 'ActivateController@activate']);
+    Route::get('/activate', ['as' => $a . 'activation-resend', 'uses' => 'ActivateController@resend']);
+    Route::get('not-activated', ['as' => 'not-activated', 'uses' => function () {
+        return view('errors.not-activated');
+    }]);
+});
 
-                Route::get('events', 'ApiController@all');
-                Route::get('events/{id}', 'ApiController@find');
 
-                Route::get('faqs', 'ApiController@all');
-                Route::get('faqs/{id}', 'ApiController@find');
+Auth::routes(['login' => 'auth.login']);
 
-                Route::get('files', 'ApiController@all');
-                Route::get('files/{id}', 'ApiController@find');
 
-                Route::get('images', 'ApiController@all');
-                Route::get('images/{id}', 'ApiController@find');
 
-                Route::get('pages', 'ApiController@all');
-                Route::get('pages/{id}', 'ApiController@find');
 
-                Route::get('widgets', 'ApiController@all');
-                Route::get('widgets/{id}', 'ApiController@find');
-            });
-        });
+/*
+|--------------------------------------------------------------------------
+| Set Language
+|--------------------------------------------------------------------------
+*/
 
-        /*
-        |--------------------------------------------------------------------------
-        | Quarx
-        |--------------------------------------------------------------------------
-        */
+Route::get('sitec/language/set/{language}', 'QuarxFeatureController@setLanguage');
 
-        Route::group(['prefix' => 'quarx'], function () {
-            Route::get('asset/{path}/{contentType}', 'AssetController@asset');
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
 
-            Route::group(['middleware' => ['auth', 'quarx']], function () {
-                Route::get('dashboard', 'DashboardController@main');
-                Route::get('help', 'HelpController@main');
+Route::get('public-preview/{encFileName}', 'AssetController@asPreview');
+Route::get('public-asset/{encFileName}', 'AssetController@asPublic');
+Route::get('public-download/{encFileName}/{encRealFileName}', 'AssetController@asDownload');
 
-                /*
-                |--------------------------------------------------------------------------
-                | Common Features
-                |--------------------------------------------------------------------------
-                */
+Route::group(['prefix' => 'sitec'], function () {
+    Route::get('asset/{path}/{contentType}', 'AssetController@asset');
+});
 
-                Route::get('preview/{entity}/{entityId}', 'QuarxFeatureController@preview');
-                Route::get('rollback/{entity}/{entityId}', 'QuarxFeatureController@rollback');
-                Route::get('revert/{id}', 'QuarxFeatureController@revert');
 
-                /*
-                |--------------------------------------------------------------------------
-                | Menus
-                |--------------------------------------------------------------------------
-                */
 
-                Route::resource('menus', 'MenuController', ['as' => 'quarx']);
-                Route::post('menus/search', 'MenuController@search');
+/*
 
-                /*
-                |--------------------------------------------------------------------------
-                | Links
-                |--------------------------------------------------------------------------
-                */
+=========================================================================================================
+=========================================================================================================
+=========================================================================================================
+=========================================================================================================
+=========================================================================================================
+=========================================================================================================
 
-                Route::resource('links', 'LinksController', ['except' => ['index', 'show'], 'as' => 'quarx']);
-                Route::post('links/search', 'LinksController@search');
+                                   O QUE VEM ABAIXO JÀ ESTAVA NO MODULO
 
-                /*
-                |--------------------------------------------------------------------------
-                | Images
-                |--------------------------------------------------------------------------
-                */
+=========================================================================================================
+=========================================================================================================
+=========================================================================================================
+=========================================================================================================
+=========================================================================================================
+=========================================================================================================
+=========================================================================================================
+=========================================================================================================
+*/
 
-                Route::resource('images', 'ImagesController', ['as' => 'quarx', 'except' => ['show']]);
-                Route::post('images/search', 'ImagesController@search');
-                Route::post('images/upload', 'ImagesController@upload');
 
-                /*
-                |--------------------------------------------------------------------------
-                | Blog
-                |--------------------------------------------------------------------------
-                */
 
-                Route::resource('blog', 'BlogController', ['as' => 'quarx', 'except' => ['show']]);
-                Route::post('blog/search', 'BlogController@search');
-                Route::get('blog/{id}/history', 'BlogController@history');
+Route::group(['middleware' => 'web'], function () {
+    Route::get('siravel', 'SiravelFeatureController@sendHome');
 
-                /*
-                |--------------------------------------------------------------------------
-                | Pages
-                |--------------------------------------------------------------------------
-                */
+    /*
+    |--------------------------------------------------------------------------
+    | Set Language
+    |--------------------------------------------------------------------------
+    */
 
-                Route::resource('pages', 'PagesController', ['as' => 'quarx', 'except' => ['show']]);
-                Route::post('pages/search', 'PagesController@search');
-                Route::get('pages/{id}/history', 'PagesController@history');
+    Route::get('siravel/language/set/{language}', 'SiravelFeatureController@setLanguage');
 
-                /*
-                |--------------------------------------------------------------------------
-                | Widgets
-                |--------------------------------------------------------------------------
-                */
+    /*
+    |--------------------------------------------------------------------------
+    | Public Routes
+    |--------------------------------------------------------------------------
+    */
 
-                Route::resource('widgets', 'WidgetsController', ['as' => 'quarx', 'except' => ['show']]);
-                Route::post('widgets/search', 'WidgetsController@search');
+    Route::get('public-preview/{encFileName}', 'AssetController@asPreview');
+    Route::get('public-asset/{encFileName}', 'AssetController@asPublic');
+    Route::get('public-download/{encFileName}/{encRealFileName}', 'AssetController@asDownload');
 
-                /*
-                |--------------------------------------------------------------------------
-                | FAQs
-                |--------------------------------------------------------------------------
-                */
+    /*
+    |--------------------------------------------------------------------------
+    | APIs
+    |--------------------------------------------------------------------------
+    */
 
-                Route::resource('faqs', 'FAQController', ['as' => 'quarx', 'except' => ['show']]);
-                Route::post('faqs/search', 'FAQController@search');
+    Route::group(['prefix' => 'siravel/api'], function () {
+        Route::get('images/list', 'ImagesController@apiList');
+        Route::post('images/store', 'ImagesController@apiStore');
+        Route::get('files/list', 'FilesController@apiList');
 
-                /*
-                |--------------------------------------------------------------------------
-                | Events
-                |--------------------------------------------------------------------------
-                */
+        Route::group(['middleware' => ['siravel-api']], function () {
+            Route::get('blog', 'ApiController@all');
+            Route::get('blog/{id}', 'ApiController@find');
 
-                Route::resource('events', 'EventController', ['as' => 'quarx', 'except' => ['show']]);
-                Route::post('events/search', 'EventController@search');
-                Route::get('events/{id}/history', 'EventController@history');
+            Route::get('events', 'ApiController@all');
+            Route::get('events/{id}', 'ApiController@find');
 
-                /*
-                |--------------------------------------------------------------------------
-                | Files
-                |--------------------------------------------------------------------------
-                */
+            Route::get('faqs', 'ApiController@all');
+            Route::get('faqs/{id}', 'ApiController@find');
 
-                Route::get('files/remove/{id}', 'FilesController@remove');
-                Route::post('files/upload', 'FilesController@upload');
-                Route::post('files/search', 'FilesController@search');
+            Route::get('files', 'ApiController@all');
+            Route::get('files/{id}', 'ApiController@find');
 
-                Route::resource('files', 'FilesController', ['as' => 'quarx', 'except' => ['show']]);
-            });
+            Route::get('images', 'ApiController@all');
+            Route::get('images/{id}', 'ApiController@find');
+
+            Route::get('pages', 'ApiController@all');
+            Route::get('pages/{id}', 'ApiController@find');
+
+            Route::get('widgets', 'ApiController@all');
+            Route::get('widgets/{id}', 'ApiController@find');
         });
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Siravel
+    |--------------------------------------------------------------------------
+    */
+
+    Route::group(['prefix' => 'siravel'], function () {
+        Route::get('asset/{path}/{contentType}', 'AssetController@asset');
+
+        Route::group(['middleware' => ['auth', 'siravel']], function () {
+            Route::get('dashboard', 'DashboardController@main');
+            Route::get('help', 'HelpController@main');
+
+            /*
+            |--------------------------------------------------------------------------
+            | Common Features
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get('preview/{entity}/{entityId}', 'SiravelFeatureController@preview');
+            Route::get('rollback/{entity}/{entityId}', 'SiravelFeatureController@rollback');
+            Route::get('revert/{id}', 'SiravelFeatureController@revert');
+
+            /*
+            |--------------------------------------------------------------------------
+            | Menus
+            |--------------------------------------------------------------------------
+            */
+
+            Route::resource('menus', 'MenuController', ['as' => 'siravel']);
+            Route::post('menus/search', 'MenuController@search');
+
+            /*
+            |--------------------------------------------------------------------------
+            | Links
+            |--------------------------------------------------------------------------
+            */
+
+            Route::resource('links', 'LinksController', ['except' => ['index', 'show'], 'as' => 'siravel']);
+            Route::post('links/search', 'LinksController@search');
+
+            /*
+            |--------------------------------------------------------------------------
+            | Images
+            |--------------------------------------------------------------------------
+            */
+
+            Route::resource('images', 'ImagesController', ['as' => 'siravel', 'except' => ['show']]);
+            Route::post('images/search', 'ImagesController@search');
+            Route::post('images/upload', 'ImagesController@upload');
+
+            /*
+            |--------------------------------------------------------------------------
+            | Blog
+            |--------------------------------------------------------------------------
+            */
+
+            Route::resource('blog', 'BlogController', ['as' => 'siravel', 'except' => ['show']]);
+            Route::post('blog/search', 'BlogController@search');
+            Route::get('blog/{id}/history', 'BlogController@history');
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Events
+            |--------------------------------------------------------------------------
+            */
+
+            Route::resource('events', 'EventController', ['as' => 'siravel', 'except' => ['show']]);
+            Route::post('events/search', 'EventController@search');
+            Route::get('events/{id}/history', 'EventController@history');
+
+            /*
+            |--------------------------------------------------------------------------
+            | Files
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get('files/remove/{id}', 'FilesController@remove');
+            Route::post('files/upload', 'FilesController@upload');
+            Route::post('files/search', 'FilesController@search');
+
+            Route::resource('files', 'FilesController', ['as' => 'siravel', 'except' => ['show']]);
+        });
+    });
+});

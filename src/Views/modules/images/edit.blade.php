@@ -1,12 +1,12 @@
-@extends('quarx::layouts.dashboard')
+@extends('siravel::layouts.dashboard')
 
 @section('content')
 
     <div class="row">
-        <h1 class="page-header">Images</h1>
+        <h1 class="page-header">{!! trans('siravel::modules.images') !!}</h1>
     </div>
 
-    @include('quarx::modules.images.breadcrumbs', ['location' => ['edit']])
+    @include('siravel::modules.images.breadcrumbs', ['location' => ['edit']])
 
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
@@ -24,13 +24,13 @@
     </div>
 
     <div class="row">
-        {!! Form::model($images, ['route' => ['quarx.images.update', $images->id], 'method' => 'patch', 'files' => true, 'class' => 'edit']) !!}
+        {!! Form::model($images, ['route' => ['siravel.images.update', $images->id], 'method' => 'patch', 'files' => true, 'class' => 'edit']) !!}
 
-            {!! FormMaker::fromObject($images, Config::get('quarx.forms.images-edit')) !!}
+            {!! FormMaker::fromObject($images, Config::get('siravel.forms.images-edit')) !!}
 
             <div class="form-group text-right">
-                <a href="{!! URL::to('quarx/images') !!}" class="btn btn-default raw-left">Cancel</a>
-                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+                <a href="{!! URL::to('siravel/images') !!}" class="btn btn-default raw-left">{!! trans('siravel::modules.cancel') !!}</a>
+                {!! Form::submit(trans('siravel::modules.save'), ['class' => 'btn btn-primary']) !!}
             </div>
 
         {!! Form::close() !!}

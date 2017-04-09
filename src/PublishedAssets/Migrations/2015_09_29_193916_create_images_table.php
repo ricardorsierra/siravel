@@ -10,7 +10,7 @@ class CreateImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('quarx.db-prefix', '').'images', function (Blueprint $table) {
+        Schema::create(config('siravel.db-prefix', '').'images', function (Blueprint $table) {
             $table->increments('id');
             $table->string('location');
             $table->string('name')->nullable();
@@ -28,6 +28,6 @@ class CreateImagesTable extends Migration
      */
     public function down()
     {
-        Schema::drop(config('quarx.db-prefix', '').'images');
+        Schema::drop(config('siravel.db-prefix', '').'images');
     }
 }

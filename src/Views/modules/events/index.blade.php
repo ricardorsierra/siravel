@@ -1,4 +1,4 @@
-@extends('quarx::layouts.dashboard')
+@extends('siravel::layouts.dashboard')
 
 @section('content')
 
@@ -14,16 +14,16 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <a id="deleteBtn" type="button" class="btn btn-warning" href="#">Confirm Delete</a>
+                    <a id="deleteBtn" type="button" class="btn btn-warning" href="#">{!! trans('siravel::modules.confirmDelete') !!}</a>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <a class="btn btn-primary pull-right" href="{!! route('quarx.events.create') !!}">Add New</a>
+        <a class="btn btn-primary pull-right" href="{!! route('siravel.events.create') !!}">{!! trans('siravel::modules.addNew') !!}</a>
         <div class="raw-m-hide pull-right">
-            {!! Form::open(['url' => 'quarx/events/search']) !!}
+            {!! Form::open(['url' => 'siravel/events/search']) !!}
             <input class="form-control header-input pull-right raw-margin-right-24" name="term" placeholder="Search">
             {!! Form::close() !!}
         </div>
@@ -43,13 +43,13 @@
                     <th>{!! sortable('Start Date', 'start_date') !!}</th>
                     <th>{!! sortable('End Date', 'end_date') !!}</th>
                     <th>{!! sortable('Published', 'is_published') !!}</th>
-                    <th width="200px" class="text-right">Actions</th>
+                    <th width="200px" class="text-right">{!! trans('siravel::modules.actions') !!}</th>
                 </thead>
                 <tbody>
 
                 @foreach($events as $event)
                     <tr>
-                        <td><a href="{!! route('quarx.events.edit', [$event->id]) !!}">{!! $event->title !!}</a></td>
+                        <td><a href="{!! route('siravel.events.edit', [$event->id]) !!}">{!! $event->title !!}</a></td>
                         <td>{!! date('M jS, Y', strtotime($event->start_date)) !!}</td>
                         <td>{!! date('M jS, Y', strtotime($event->end_date)) !!}</td>
                         <td class="raw-m-hide">
@@ -60,12 +60,12 @@
                             @endif
                         </td>
                         <td class="text-right">
-                            <form method="post" action="{!! url('quarx/events/'.$event->id) !!}">
+                            <form method="post" action="{!! url('siravel/events/'.$event->id) !!}">
                                 {!! csrf_field() !!}
                                 {!! method_field('DELETE') !!}
-                                <button class="delete-btn btn btn-xs btn-danger pull-right" type="submit"><i class="fa fa-trash"></i> Delete</button>
+                                <button class="delete-btn btn btn-xs btn-danger pull-right" type="submit"><i class="fa fa-trash"></i> {!! trans('siravel::modules.delete') !!}</button>
                             </form>
-                            <a class="btn btn-xs btn-default pull-right raw-margin-right-8" href="{!! route('quarx.events.edit', [$event->id]) !!}"><i class="fa fa-pencil"></i> Edit</a>
+                            <a class="btn btn-xs btn-default pull-right raw-margin-right-8" href="{!! route('siravel.events.edit', [$event->id]) !!}"><i class="fa fa-pencil"></i> {!! trans('siravel::modules.edit') !!}</a>
                         </td>
                     </tr>
                 @endforeach

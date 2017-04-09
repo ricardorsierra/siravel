@@ -1,14 +1,14 @@
-@extends('quarx-frontend::layout.master')
+@extends('siravel-frontend::layout.master')
 
 @section('content')
 
 <div class="container">
 
-    <h1>FAQs</h1>
+    <h1>{!! trans('siravel::modules.faqs') !!}</h1>
 
     @foreach($faqs as $faq)
         <div class="container-fluid">
-        @if (config('app.locale') !== config('quarx.default-language'))
+        @if (config('app.locale') !== config('siravel.default-language'))
             <blockquote>{!! $faq->translationData(config('app.locale'))->question !!}</blockquote>
             <div class="well">
                 {!! $faq->translationData(config('app.locale'))->answer !!}
@@ -28,6 +28,6 @@
 
 @endsection
 
-@section('quarx')
+@section('siravel')
     @edit('faqs')
 @endsection

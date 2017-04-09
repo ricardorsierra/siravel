@@ -1,8 +1,8 @@
 <?php
 
-namespace Yab\Quarx\Models;
+namespace Sitec\Siravel\Models;
 
-class Archive extends QuarxModel
+class Archive extends SiravelModel
 {
     public $table = 'archives';
 

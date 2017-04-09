@@ -6,7 +6,7 @@
 |--------------------------------------------------------------------------
 */
 
-$factory->define(\Yab\Quarx\Models\Image::class, function (Faker\Generator $faker) {
+$factory->define(\Sitec\Siravel\Models\Image::class, function (Faker\Generator $faker) {
     return [
         'id' => 1,
         'location' => 'files/dumb',

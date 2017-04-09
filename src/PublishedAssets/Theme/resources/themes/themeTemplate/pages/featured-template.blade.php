@@ -1,4 +1,4 @@
-@extends('quarx-frontend::layout.master')
+@extends('siravel-frontend::layout.master')
 
 @section('seoDescription') {{ $page->seo_description }} @endsection
 @section('seoKeywords') {{ $page->seo_keywords }} @endsection
@@ -8,7 +8,7 @@
 <div class="container">
 
     <div class="jumbotron">
-        <h1>Featured Page</h1>
+        <h1>{!! trans('siravel::modules.featuredPage') !!}</h1>
         <h2>{{ $page->title }}</h2>
     </div>
 
@@ -18,6 +18,6 @@
 
 @endsection
 
-@section('quarx')
+@section('siravel')
     @edit('pages', $page->id)
 @endsection

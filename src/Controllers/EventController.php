@@ -1,16 +1,16 @@
 <?php
 
-namespace Yab\Quarx\Controllers;
+namespace Sitec\Siravel\Controllers;
 
 use URL;
-use Quarx;
-use Yab\Quarx\Models\Event;
+use Siravel;
+use Sitec\Siravel\Models\Event;
 use Illuminate\Http\Request;
-use Yab\Quarx\Requests\EventRequest;
-use Yab\Quarx\Services\ValidationService;
-use Yab\Quarx\Repositories\EventRepository;
+use Sitec\Siravel\Requests\EventRequest;
+use Sitec\Siravel\Services\ValidationService;
+use Sitec\Siravel\Repositories\EventRepository;
 
-class EventController extends QuarxController
+class EventController extends SiravelController
 {
     /** @var EventRepository */
     private $eventRepository;
@@ -29,7 +29,7 @@ class EventController extends QuarxController
     {
         $result = $this->eventRepository->paginated();
 
-        return view('quarx::modules.events.index')
+        return view('siravel::modules.events.index')
             ->with('events', $result)
             ->with('pagination', $result->render());
     }
@@ -47,7 +47,7 @@ class EventController extends QuarxController
 
         $result = $this->eventRepository->search($input);
 
-        return view('quarx::modules.events.index')
+        return view('siravel::modules.events.index')
             ->with('events', $result[0]->get())
             ->with('pagination', $result[2])
             ->with('term', $result[1]);
@@ -60,7 +60,7 @@ class EventController extends QuarxController
      */
     public function create()
     {
-        return view('quarx::modules.events.create');
+        return view('siravel::modules.events.create');
     }
 
     /**
@@ -76,16 +76,16 @@ class EventController extends QuarxController
 
         if (!$validation['errors']) {
             $event = $this->eventRepository->store($request->all());
-            Quarx::notification('Event saved successfully.', 'success');
+            Siravel::notification('Event saved successfully.', 'success');
         } else {
             return $validation['redirect'];
         }
 
         if (!$event) {
-            Quarx::notification('Event could not be saved.', 'warning');
+            Siravel::notification('Event could not be saved.', 'warning');
         }
 
-        return redirect(route('quarx.events.edit', [$event->id]));
+        return redirect(route('siravel.events.edit', [$event->id]));
     }
 
     /**
@@ -100,12 +100,12 @@ class EventController extends QuarxController
         $event = $this->eventRepository->findEventById($id);
 
         if (empty($event)) {
-            Quarx::notification('Event not found', 'warning');
+            Siravel::notification('Event not found', 'warning');
 
-            return redirect(route('quarx.events.index'));
+            return redirect(route('siravel.events.index'));
         }
 
-        return view('quarx::modules.events.edit')->with('event', $event);
+        return view('siravel::modules.events.edit')->with('event', $event);
     }
 
     /**
@@ -121,16 +121,16 @@ class EventController extends QuarxController
         $event = $this->eventRepository->findEventById($id);
 
         if (empty($event)) {
-            Quarx::notification('Event not found', 'warning');
+            Siravel::notification('Event not found', 'warning');
 
-            return redirect(route('quarx.events.index'));
+            return redirect(route('siravel.events.index'));
         }
 
         $event = $this->eventRepository->update($event, $request->all());
-        Quarx::notification('Event updated successfully.', 'success');
+        Siravel::notification('Event updated successfully.', 'success');
 
         if (!$event) {
-            Quarx::notification('Event could not be saved.', 'warning');
+            Siravel::notification('Event could not be saved.', 'warning');
         }
 
         return redirect(URL::previous());
@@ -148,16 +148,16 @@ class EventController extends QuarxController
         $event = $this->eventRepository->findEventById($id);
 
         if (empty($event)) {
-            Quarx::notification('Event not found', 'warning');
+            Siravel::notification('Event not found', 'warning');
 
-            return redirect(route('quarx.events.index'));
+            return redirect(route('siravel.events.index'));
         }
 
         $event->delete();
 
-        Quarx::notification('Event deleted successfully.', 'success');
+        Siravel::notification('Event deleted successfully.', 'success');
 
-        return redirect(route('quarx.events.index'));
+        return redirect(route('siravel.events.index'));
     }
 
     /**
@@ -171,7 +171,7 @@ class EventController extends QuarxController
     {
         $event = $this->eventRepository->findEventById($id);
 
-        return view('quarx::modules.events.history')
+        return view('siravel::modules.events.history')
             ->with('event', $event);
     }
 }

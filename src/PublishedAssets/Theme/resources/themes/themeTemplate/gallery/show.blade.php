@@ -1,10 +1,10 @@
-@extends('quarx-frontend::layout.master')
+@extends('siravel-frontend::layout.master')
 
 @section('content')
 
 <div class="container">
 
-    <h1>Gallery ({{ $title }})</h1>
+    <h1>{!! trans('siravel::modules.gallery') !!} ({{ $title }})</h1>
 
     <div class="col-md-8">
         @foreach ($images as $image)
@@ -21,6 +21,6 @@
 
 @endsection
 
-@section('quarx')
+@section('siravel')
     @edit('images')
 @endsection

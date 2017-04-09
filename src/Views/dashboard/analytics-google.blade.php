@@ -1,10 +1,10 @@
-@extends('quarx::layouts.dashboard')
+@extends('siravel::layouts.dashboard')
 
 @section('content')
 
     <div class="row">
         <div class="col-md-12">
-            <h1 class="page-header">Dashboard</h1>
+            <h1 class="page-header">{!! trans('siravel::modules.dashboard') !!}</h1>
 
             <div class="row">
                 <canvas id="dashboardChart" class="raw100"></canvas>
@@ -12,11 +12,11 @@
 
             <div class="row raw-margin-top-24">
                 <div class="col-md-4">
-                    <p class="lead">Keywords</p>
+                    <p class="lead">{!! trans('siravel::modules.keywords') !!}</p>
                     <table class="table table-striped">
                         <thead>
-                            <th>Keyword</th>
-                            <th>Sessions</th>
+                            <th>{!! trans('siravel::modules.keyword') !!}</th>
+                            <th>{!! trans('siravel::modules.sessions') !!}</th>
                         </thead>
                         @foreach (LaravelAnalytics::getTopKeywords(365, 10) as $word)
                             <tr>
@@ -27,11 +27,11 @@
                     </table>
                 </div>
                 <div class="col-md-4">
-                    <p class="lead">Most Visited Pages</p>
+                    <p class="lead">{!! trans('siravel::modules.mostVisitedPages') !!}</p>
                     <table class="table table-striped">
                         <thead>
-                            <th>URL</th>
-                            <th>Views</th>
+                            <th>{!! trans('siravel::modules.url') !!}</th>
+                            <th>{!! trans('siravel::modules.views') !!}</th>
                         </thead>
                         @foreach (LaravelAnalytics::getMostVisitedPages(365, 10) as $browser)
                             <tr>
@@ -42,11 +42,11 @@
                     </table>
                 </div>
                 <div class="col-md-4">
-                    <p class="lead">Top Referers</p>
+                    <p class="lead">{!! trans('siravel::modules.topReferers') !!}</p>
                     <table class="table table-striped">
                         <thead>
-                            <th>URL</th>
-                            <th>Views</th>
+                            <th>{!! trans('siravel::modules.url') !!}</th>
+                            <th>{!! trans('siravel::modules.views') !!}</th>
                         </thead>
                         @foreach (LaravelAnalytics::getTopReferrers(365, 10) as $referers)
                             <tr>
@@ -73,5 +73,5 @@
         var options = {};
     </script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.js"></script>
-    {!! Minify::javascript(Quarx::asset('js/dashboard-chart.js')) !!}
+    {!! Minify::javascript(Siravel::asset('js/dashboard-chart.js')) !!}
 @stop

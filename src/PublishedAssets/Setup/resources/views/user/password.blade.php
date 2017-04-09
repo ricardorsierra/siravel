@@ -1,10 +1,10 @@
-@extends('quarx-frontend::layout.master')
+@extends('siravel-frontend::layout.master')
 
 @section('content')
 
     <div class="container">
         <div class="row">
-            <h1 class="page-header">Password</h1>
+            <h1 class="page-header">{!! trans('siravel::modules.password') !!}</h1>
         </div>
 
         <div class="row">
@@ -16,23 +16,23 @@
                     {!! csrf_field() !!}
 
                     <div class="col-md-12 form-group">
-                        <label>Old Password</label>
-                        <input class="form-control" type="password" name="old_password" placeholder="Old Password">
+                        <label>{!! trans('siravel::modules.oldPassword') !!}</label>
+                        <input class="form-control" type="password" name="old_password" placeholder="{!! trans('siravel::modules.oldPassword') !!}">
                     </div>
 
                     <div class="col-md-12 form-group">
-                        <label>New Password</label>
-                        <input class="form-control" type="password" name="new_password" placeholder="New Password">
+                        <label>{!! trans('siravel::modules.newPassword') !!}</label>
+                        <input class="form-control" type="password" name="new_password" placeholder="{!! trans('siravel::modules.newPassword') !!}">
                     </div>
 
                     <div class="col-md-12 form-group">
-                        <label>Confirm Password</label>
-                        <input class="form-control" type="password" name="new_password_confirmation" placeholder="Confirm Password">
+                        <label>{!! trans('siravel::modules.confirmPassword') !!}</label>
+                        <input class="form-control" type="password" name="new_password_confirmation" placeholder="{!! trans('siravel::modules.confirmPassword') !!}">
                     </div>
 
                     <div class="col-md-12 form-group">
-                        <a class="btn btn-default pull-left" href="{{ URL::previous() }}">Cancel</a>
-                        <button class="btn btn-primary pull-right" type="submit">Save</button>
+                        <a class="btn btn-default pull-left" href="{{ URL::previous() }}">{!! trans('siravel::modules.cancel') !!}</a>
+                        <button class="btn btn-primary pull-right" type="submit">{!! trans('siravel::modules.save') !!}</button>
                     </div>
                 </form>
 

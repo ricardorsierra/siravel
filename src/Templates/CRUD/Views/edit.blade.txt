@@ -1,23 +1,23 @@
-@extends('quarx::layouts.dashboard')
+@extends('siravel::layouts.dashboard')
 
 @section('content')
 
     <div class="row">
-        <a class="btn btn-primary pull-right" href="{!! route('quarx._lower_casePlural_.create') !!}">Add New</a>
-        <a class="btn btn-warning pull-right raw-margin-right-8" href="{!! Quarx::rollbackUrl($_lower_case_) !!}">Rollback</a>
+        <a class="btn btn-primary pull-right" href="{!! route('siravel._lower_casePlural_.create') !!}">{!! trans('siravel::modules.addNew') !!}</a>
+        <a class="btn btn-warning pull-right raw-margin-right-8" href="{!! Siravel::rollbackUrl($_lower_case_) !!}">{!! trans('siravel::modules.rollback') !!}</a>
         <h1 class="page-header">_camel_casePlural_</h1>
     </div>
 
     @include('_lower_casePlural_::_lower_casePlural_.breadcrumbs', ['location' => ['edit']])
 
     <div class="row">
-        {!! Form::model($_lower_case_, ['route' => ['quarx._lower_casePlural_.update', $_lower_case_->id], 'method' => 'patch', 'class' => 'edit']) !!}
+        {!! Form::model($_lower_case_, ['route' => ['siravel._lower_casePlural_.update', $_lower_case_->id], 'method' => 'patch', 'class' => 'edit']) !!}
 
             {!! FormMaker::fromObject($_lower_case_, FormMaker::getTableColumns('_lower_casePlural_')) !!}
 
             <div class="form-group text-right">
-                <a href="{!! URL::to('quarx/_lower_casePlural_') !!}" class="btn btn-default raw-left">Cancel</a>
-                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+                <a href="{!! URL::to('siravel/_lower_casePlural_') !!}" class="btn btn-default raw-left">{!! trans('siravel::modules.cancel') !!}</a>
+                {!! Form::submit(trans('siravel::modules.save'), ['class' => 'btn btn-primary']) !!}
             </div>
 
         {!! Form::close() !!}

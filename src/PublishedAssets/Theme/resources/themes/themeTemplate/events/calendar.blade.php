@@ -1,10 +1,10 @@
-@extends('quarx-frontend::layout.master')
+@extends('siravel-frontend::layout.master')
 
 @section('content')
 
 <div class="container">
 
-    <h1>Calendar</h1>
+    <h1>{!! trans('siravel::modules.calendar') !!}</h1>
 
     <div class="row">
         <div class="col-md-12">
@@ -17,6 +17,6 @@
 
 @endsection
 
-@section('quarx')
+@section('siravel')
     @edit('events')
 @endsection

@@ -10,7 +10,7 @@ class CreateFaqsTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('quarx.db-prefix', '').'faqs', function (Blueprint $table) {
+        Schema::create(config('siravel.db-prefix', '').'faqs', function (Blueprint $table) {
             $table->increments('id');
             $table->string('question');
             $table->text('answer');
@@ -24,6 +24,6 @@ class CreateFaqsTable extends Migration
      */
     public function down()
     {
-        Schema::drop(config('quarx.db-prefix', '').'faqs');
+        Schema::drop(config('siravel.db-prefix', '').'faqs');
     }
 }

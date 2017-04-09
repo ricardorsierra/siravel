@@ -1,8 +1,8 @@
-<h1>Welcome {{ $user->email }}</h1>
+<h1>{!! trans('siravel::modules.welcome') !!} {{ $user->email }}</h1>
 
-<p>You have a brand new account! We're so delighted to bring you on board.</p>
+<p>{!! trans('siravel::modules.infoNewAccount') !!}</p>
 
-<p>Email: {{ $user->email }}</p>
-<p>Password: {{ $password }}</p>
+<p>{!! trans('siravel::modules.email') !!}: {{ $user->email }}</p>
+<p>{!! trans('siravel::modules.password') !!}: {{ $password }}</p>
 
-<p>Go here to login: <a href="{{ url('login') }}">Login</a></p>
+<p>{!! trans('siravel::modules.goToLogin') !!}: <a href="{{ url('login') }}">{!! trans('siravel::modules.login') !!}</a></p>

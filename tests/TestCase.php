@@ -11,7 +11,7 @@ class TestCase extends Orchestra\Testbench\TestCase
     protected function getEnvironmentSetUp($app)
     {
         $app['config']->set('database.default', 'testbench');
-        $app['config']->set('quarx.load-modules', false);
+        $app['config']->set('siravel.load-modules', false);
         $app['config']->set('database.connections.testbench', [
             'driver' => 'sqlite',
             'database' => ':memory:',
@@ -21,7 +21,7 @@ class TestCase extends Orchestra\Testbench\TestCase
         $app['config']->set('minify.config.ignore_environments', ['local', 'testing']);
         $app->make('Illuminate\Contracts\Http\Kernel')->pushMiddleware('Illuminate\Session\Middleware\StartSession');
 
-        $app['Illuminate\Contracts\Auth\Access\Gate']->define('quarx', function ($user) {
+        $app['Illuminate\Contracts\Auth\Access\Gate']->define('siravel', function ($user) {
             return true;
         });
     }
@@ -36,10 +36,10 @@ class TestCase extends Orchestra\Testbench\TestCase
     protected function getPackageProviders($app)
     {
         return [
-            \Yab\Quarx\QuarxProvider::class,
+            \Sitec\Siravel\SiravelProvider::class,
             \Collective\Html\HtmlServiceProvider::class,
             \Collective\Html\HtmlServiceProvider::class,
-            \Yab\Laracogs\LaracogsProvider::class,
+            \Sitec\Laracogs\LaracogsProvider::class,
         ];
     }
 
@@ -48,9 +48,9 @@ class TestCase extends Orchestra\Testbench\TestCase
         return [
             'Form' => \Collective\Html\FormFacade::class,
             'HTML' => \Collective\Html\HtmlFacade::class,
-            'FormMaker' => \Yab\Laracogs\Facades\FormMaker::class,
-            'InputMaker' => \Yab\Laracogs\Facades\InputMaker::class,
-            'Crypto' => \Yab\Laracogs\Utilities\Crypto::class,
+            'FormMaker' => \Sitec\Laracogs\Facades\FormMaker::class,
+            'InputMaker' => \Sitec\Laracogs\Facades\InputMaker::class,
+            'Crypto' => \Sitec\Laracogs\Utilities\Crypto::class,
         ];
     }
 
@@ -62,7 +62,7 @@ class TestCase extends Orchestra\Testbench\TestCase
         parent::setUp();
         $this->withFactories(__DIR__.'/../src/Models/Factories');
         $this->artisan('vendor:publish', [
-            '--provider' => 'Yab\Quarx\QuarxProvider',
+            '--provider' => 'Sitec\Siravel\SiravelProvider',
             '--force' => true,
         ]);
         $this->artisan('migrate', [

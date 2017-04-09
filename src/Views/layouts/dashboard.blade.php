@@ -1,4 +1,4 @@
-@extends('quarx::layouts.navigation')
+@extends('siravel::layouts.navigation')
 
 @section('page-content')
 
@@ -7,7 +7,7 @@
     <div class="raw100 raw-left raw-margin-top-50">
         <div class="col-sm-3 col-md-2 sidebar">
             <div class="raw100 raw-left raw-margin-bottom-90">
-                @include('quarx::dashboard.panel')
+                @include('siravel::dashboard.panel')
             </div>
         </div>
 
@@ -19,14 +19,14 @@
     </div>
 
     <div class="raw100 raw-left navbar navbar-fixed-bottom">
-        <div class="raw100 raw-left quarx-footer">
-            <p class="raw-margin-left-20 pull-left">Brought to you by: <a href="https://yabhq.com">Yab Inc.</a></p>
-            <p class="raw-margin-right-20 pull-right">v. {{ Quarx::version() }}</p>
+        <div class="raw100 raw-left siravel-footer">
+            <p class="raw-margin-left-20 pull-left">{!! trans('siravel::modules.desenvolvidoPor') !!}: <a href="https://sierratecnologia.com.br">SierraTecnologia Inc.</a></p>
+            <p class="raw-margin-right-20 pull-right">v. {{ Siravel::version() }}</p>
         </div>
     </div>
 @stop
 
 @section('javascript')
-    {!! Minify::javascript(Quarx::asset('js/dashboard.js', 'application/javascript')) !!}
-    {!! Minify::javascript(Quarx::asset('js/chart.min.js', 'application/javascript')) !!}
+    {!! Minify::javascript(Siravel::asset('js/dashboard.js', 'application/javascript')) !!}
+    {!! Minify::javascript(Siravel::asset('js/chart.min.js', 'application/javascript')) !!}
 @stop

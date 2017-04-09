@@ -7,7 +7,7 @@ class EventsTest extends TestCase
         parent::setUp();
         $this->withoutMiddleware();
         $this->withoutEvents();
-        factory(\Yab\Quarx\Models\Event::class)->create();
+        factory(\Sitec\Siravel\Models\Event::class)->create();
     }
 
     /*
@@ -18,20 +18,20 @@ class EventsTest extends TestCase
 
     public function testIndex()
     {
-        $response = $this->call('GET', 'quarx/events');
+        $response = $this->call('GET', 'siravel/events');
         $this->assertEquals(200, $response->getStatusCode());
         $response->assertViewHas('events');
     }
 
     public function testCreate()
     {
-        $response = $this->call('GET', 'quarx/events/create');
+        $response = $this->call('GET', 'siravel/events/create');
         $this->assertEquals(200, $response->getStatusCode());
     }
 
     public function testEdit()
     {
-        $response = $this->call('GET', 'quarx/events/1/edit');
+        $response = $this->call('GET', 'siravel/events/1/edit');
         $this->assertEquals(200, $response->getStatusCode());
         $response->assertViewHas('event');
     }
@@ -44,15 +44,15 @@ class EventsTest extends TestCase
 
     public function testStore()
     {
-        $events = factory(\Yab\Quarx\Models\Event::class)->make(['id' => 2]);
-        $response = $this->call('POST', 'quarx/events', $events['attributes']);
+        $events = factory(\Sitec\Siravel\Models\Event::class)->make(['id' => 2]);
+        $response = $this->call('POST', 'siravel/events', $events['attributes']);
 
         $this->assertEquals(302, $response->getStatusCode());
     }
 
     public function testSearch()
     {
-        $response = $this->call('POST', 'quarx/events/search', ['term' => 'wtf']);
+        $response = $this->call('POST', 'siravel/events/search', ['term' => 'wtf']);
 
         $response->assertViewHas('events');
         $this->assertEquals(200, $response->getStatusCode());
@@ -61,9 +61,9 @@ class EventsTest extends TestCase
     public function testUpdate()
     {
         $page = ['id' => 6, 'title' => 'dumber', 'start_date' => '2016-10-31', 'end_date' => '2016-10-31', 'details' => 'okie dokie'];
-        $response = $this->call('POST', 'quarx/events', $page);
+        $response = $this->call('POST', 'siravel/events', $page);
 
-        $response = $this->call('PATCH', 'quarx/events/6', [
+        $response = $this->call('PATCH', 'siravel/events/6', [
             'title' => 'smarter',
         ]);
 
@@ -74,23 +74,23 @@ class EventsTest extends TestCase
     public function testUpdateTranslation()
     {
         $page = ['id' => 6, 'title' => 'dumber', 'start_date' => '2016-10-31', 'end_date' => '2016-10-31', 'details' => 'okie dokie'];
-        $response = $this->call('POST', 'quarx/events', $page);
+        $response = $this->call('POST', 'siravel/events', $page);
 
-        $response = $this->call('PATCH', 'quarx/events/6', [
+        $response = $this->call('PATCH', 'siravel/events/6', [
             'title' => 'smarter',
             'lang' => 'fr',
         ]);
 
         $this->assertDatabaseHas('translations', [
-            'entity_type' => 'Yab\\Quarx\\Models\\Event',
+            'entity_type' => 'Sitec\\Siravel\\Models\\Event',
         ]);
         $this->assertEquals(302, $response->getStatusCode());
     }
 
     public function testDelete()
     {
-        $response = $this->call('DELETE', 'quarx/events/1');
+        $response = $this->call('DELETE', 'siravel/events/1');
         $this->assertEquals(302, $response->getStatusCode());
-        $response->assertRedirect('quarx/events');
+        $response->assertRedirect('siravel/events');
     }
 }

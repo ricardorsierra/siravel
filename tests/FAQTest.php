@@ -7,7 +7,7 @@ class FAQTest extends TestCase
         parent::setUp();
         $this->withoutMiddleware();
         $this->withoutEvents();
-        factory(\Yab\Quarx\Models\FAQ::class)->create();
+        factory(\Sitec\Siravel\Models\FAQ::class)->create();
     }
 
     /*
@@ -18,20 +18,20 @@ class FAQTest extends TestCase
 
     public function testIndex()
     {
-        $response = $this->call('GET', 'quarx/faqs');
+        $response = $this->call('GET', 'siravel/faqs');
         $this->assertEquals(200, $response->getStatusCode());
         $response->assertViewHas('faqs');
     }
 
     public function testCreate()
     {
-        $response = $this->call('GET', 'quarx/faqs/create');
+        $response = $this->call('GET', 'siravel/faqs/create');
         $this->assertEquals(200, $response->getStatusCode());
     }
 
     public function testEdit()
     {
-        $response = $this->call('GET', 'quarx/faqs/1'.'/edit');
+        $response = $this->call('GET', 'siravel/faqs/1'.'/edit');
         $this->assertEquals(200, $response->getStatusCode());
         $response->assertViewHas('faq');
     }
@@ -44,7 +44,7 @@ class FAQTest extends TestCase
 
     public function testStore()
     {
-        $response = $this->call('POST', 'quarx/faqs', [
+        $response = $this->call('POST', 'siravel/faqs', [
             'question' => 'who is this',
             'answer' => 'I am your worst nightmare!',
             'is_published' => '',
@@ -56,7 +56,7 @@ class FAQTest extends TestCase
 
     public function testSearch()
     {
-        $response = $this->call('POST', 'quarx/faqs/search', ['term' => 'wtf']);
+        $response = $this->call('POST', 'siravel/faqs/search', ['term' => 'wtf']);
 
         $response->assertViewHas('faqs');
         $this->assertEquals(200, $response->getStatusCode());
@@ -64,7 +64,7 @@ class FAQTest extends TestCase
 
     public function testUpdate()
     {
-        $response = $this->call('PATCH', 'quarx/faqs/1', [
+        $response = $this->call('PATCH', 'siravel/faqs/1', [
             'question' => 'who is this',
             'answer' => 'I am your worst nightmare!',
             'is_published' => 'on',
@@ -76,7 +76,7 @@ class FAQTest extends TestCase
 
     public function testUpdateTranslation()
     {
-        $response = $this->call('PATCH', 'quarx/faqs/1', [
+        $response = $this->call('PATCH', 'siravel/faqs/1', [
             'question' => 'who is this',
             'answer' => 'I am your worst nightmare!',
             'is_published' => 'on',
@@ -84,15 +84,15 @@ class FAQTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('translations', [
-            'entity_type' => 'Yab\\Quarx\\Models\\FAQ',
+            'entity_type' => 'Sitec\\Siravel\\Models\\FAQ',
         ]);
         $this->assertEquals(302, $response->getStatusCode());
     }
 
     public function testDelete()
     {
-        $response = $this->call('DELETE', 'quarx/faqs/1');
+        $response = $this->call('DELETE', 'siravel/faqs/1');
         $this->assertEquals(302, $response->getStatusCode());
-        $response->assertRedirect('quarx/faqs');
+        $response->assertRedirect('siravel/faqs');
     }
 }

@@ -1,10 +1,10 @@
-@extends('quarx-frontend::layout.master')
+@extends('siravel-frontend::layout.master')
 
 @section('content')
 
 <div class="container">
 
-    <h1>Pages</h1>
+    <h1>{!! trans('siravel::modules.pages') !!}</h1>
 
     @foreach($pages as $page)
         <a href="{!! url('page/'.$page->url) !!}">{{ $page->title }}</a><br>
@@ -14,6 +14,6 @@
 
 @endsection
 
-@section('quarx')
+@section('siravel')
     @edit('pages')
 @endsection

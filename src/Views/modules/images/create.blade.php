@@ -1,24 +1,24 @@
-@extends('quarx::layouts.dashboard')
+@extends('siravel::layouts.dashboard')
 
 @section('content')
 
     <div class="row">
-        <h1 class="page-header">Images</h1>
+        <h1 class="page-header">{!! trans('siravel::modules.images') !!}</h1>
     </div>
 
-    @include('quarx::modules.images.breadcrumbs', ['location' => ['create']])
+    @include('siravel::modules.images.breadcrumbs', ['location' => ['create']])
 
     <div class="row">
-        {!! Form::open(['url' => 'quarx/images/upload', 'files' => true, 'class' => 'dropzone', 'id' => 'fileDropzone']); !!}
+        {!! Form::open(['url' => 'siravel/images/upload', 'files' => true, 'class' => 'dropzone', 'id' => 'fileDropzone']); !!}
         {!! Form::close() !!}
 
-        {!! Form::open(['route' => 'quarx.images.store', 'files' => true, 'id' => 'fileDetailsForm', 'class' => 'add']) !!}
+        {!! Form::open(['route' => 'siravel.images.store', 'files' => true, 'id' => 'fileDetailsForm', 'class' => 'add']) !!}
 
-            {!! FormMaker::fromTable('files', Config::get('quarx.forms.images')) !!}
+            {!! FormMaker::fromTable('files', Config::get('siravel.forms.images')) !!}
 
             <div class="form-group text-right">
-                <a href="{!! URL::to('quarx/images') !!}" class="btn btn-default raw-left">Cancel</a>
-                {!! Form::submit('Save', ['class' => 'btn btn-primary', 'id' => 'saveImagesBtn']) !!}
+                <a href="{!! URL::to('siravel/images') !!}" class="btn btn-default raw-left">{!! trans('siravel::modules.cancel') !!}</a>
+                {!! Form::submit(trans('siravel::modules.save'), ['class' => 'btn btn-primary', 'id' => 'saveImagesBtn']) !!}
             </div>
 
         {!! Form::close() !!}

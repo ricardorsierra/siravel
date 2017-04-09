@@ -1,13 +1,13 @@
 <?php
 
-namespace Yab\Quarx\Controllers;
+namespace Sitec\Siravel\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Config;
 
-class ApiController extends QuarxController
+class ApiController extends SiravelController
 {
     protected $model;
 
@@ -15,7 +15,7 @@ class ApiController extends QuarxController
     {
         $this->modelName = str_singular($request->segment(3));
         if (!empty($this->modelName)) {
-            $this->model = app('Yab\Quarx\Models\\'.ucfirst($this->modelName));
+            $this->model = app('Sitec\Siravel\Models\\'.ucfirst($this->modelName));
         }
     }
 
@@ -35,7 +35,7 @@ class ApiController extends QuarxController
 
         return $query
             ->orderBy('created_at', 'desc')
-            ->paginate(Config::get('quarx.pagination', 25));
+            ->paginate(Config::get('siravel.pagination', 25));
     }
 
     public function search($term)
@@ -51,7 +51,7 @@ class ApiController extends QuarxController
 
         return [
             'term' => $input['term'],
-            'result' => $query->paginate(Config::get('quarx.pagination', 25)),
+            'result' => $query->paginate(Config::get('siravel.pagination', 25)),
         ];
     }
 }

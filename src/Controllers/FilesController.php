@@ -1,23 +1,23 @@
 <?php
 
-namespace Yab\Quarx\Controllers;
+namespace Sitec\Siravel\Controllers;
 
-use Quarx;
+use Siravel;
 use Config;
 use Storage;
 use Redirect;
 use Response;
 use Exception;
 use CryptoService;
-use Yab\Quarx\Models\File;
+use Sitec\Siravel\Models\File;
 use Illuminate\Http\Request;
-use Yab\Quarx\Requests\FileRequest;
-use Yab\Quarx\Services\FileService;
-use Yab\Quarx\Services\ValidationService;
-use Yab\Quarx\Repositories\FileRepository;
-use Yab\Quarx\Services\QuarxResponseService;
+use Sitec\Siravel\Requests\FileRequest;
+use Sitec\Siravel\Services\FileService;
+use Sitec\Siravel\Services\ValidationService;
+use Sitec\Siravel\Repositories\FileRepository;
+use Sitec\Siravel\Services\SiravelResponseService;
 
-class FilesController extends QuarxController
+class FilesController extends SiravelController
 {
     /** @var FilesRepository */
     private $fileRepository;
@@ -38,7 +38,7 @@ class FilesController extends QuarxController
     {
         $result = $this->fileRepository->paginated();
 
-        return view('quarx::modules.files.index')
+        return view('siravel::modules.files.index')
             ->with('files', $result)
             ->with('pagination', $result->render());
     }
@@ -56,7 +56,7 @@ class FilesController extends QuarxController
 
         $result = $this->fileRepository->search($input);
 
-        return view('quarx::modules.files.index')
+        return view('siravel::modules.files.index')
             ->with('files', $result[0]->get())
             ->with('pagination', $result[2])
             ->with('term', $result[1]);
@@ -69,7 +69,7 @@ class FilesController extends QuarxController
      */
     public function create()
     {
-        return view('quarx::modules.files.create');
+        return view('siravel::modules.files.create');
     }
 
     /**
@@ -89,9 +89,9 @@ class FilesController extends QuarxController
             return $validation['redirect'];
         }
 
-        Quarx::notification('File saved successfully.', 'success');
+        Siravel::notification('File saved successfully.', 'success');
 
-        return redirect(route('quarx.files.index'));
+        return redirect(route('siravel.files.index'));
     }
 
     /**
@@ -113,9 +113,9 @@ class FilesController extends QuarxController
             $fileSaved['name'] = CryptoService::encrypt($fileSaved['name']);
             $fileSaved['mime'] = $file->getClientMimeType();
             $fileSaved['size'] = $file->getClientSize();
-            $response = QuarxResponseService::apiResponse('success', $fileSaved);
+            $response = SiravelResponseService::apiResponse('success', $fileSaved);
         } else {
-            $response = QuarxResponseService::apiErrorResponse($validation['errors'], $validation['inputs']);
+            $response = SiravelResponseService::apiErrorResponse($validation['errors'], $validation['inputs']);
         }
 
         return $response;
@@ -133,9 +133,9 @@ class FilesController extends QuarxController
         try {
             Storage::delete($id);
 
-            $response = QuarxResponseService::apiResponse('success', 'success!');
+            $response = SiravelResponseService::apiResponse('success', 'success!');
         } catch (Exception $e) {
-            $response = QuarxResponseService::apiResponse('error', $e->getMessage());
+            $response = SiravelResponseService::apiResponse('error', $e->getMessage());
         }
 
         return $response;
@@ -153,12 +153,12 @@ class FilesController extends QuarxController
         $files = $this->fileRepository->findFilesById($id);
 
         if (empty($files)) {
-            Quarx::notification('File not found', 'warning');
+            Siravel::notification('File not found', 'warning');
 
-            return redirect(route('quarx.files.index'));
+            return redirect(route('siravel.files.index'));
         }
 
-        return view('quarx::modules.files.edit')->with('files', $files);
+        return view('siravel::modules.files.edit')->with('files', $files);
     }
 
     /**
@@ -174,14 +174,14 @@ class FilesController extends QuarxController
         $files = $this->fileRepository->findFilesById($id);
 
         if (empty($files)) {
-            Quarx::notification('File not found', 'warning');
+            Siravel::notification('File not found', 'warning');
 
-            return redirect(route('quarx.files.index'));
+            return redirect(route('siravel.files.index'));
         }
 
         $files = $this->fileRepository->update($files, $request->all());
 
-        Quarx::notification('File updated successfully.', 'success');
+        Siravel::notification('File updated successfully.', 'success');
 
         return Redirect::back();
     }
@@ -198,17 +198,17 @@ class FilesController extends QuarxController
         $files = $this->fileRepository->findFilesById($id);
 
         if (empty($files)) {
-            Quarx::notification('File not found', 'warning');
+            Siravel::notification('File not found', 'warning');
 
-            return redirect(route('quarx.files.index'));
+            return redirect(route('siravel.files.index'));
         }
 
         Storage::delete($files->location);
         $files->delete();
 
-        Quarx::notification('File deleted successfully.', 'success');
+        Siravel::notification('File deleted successfully.', 'success');
 
-        return redirect(route('quarx.files.index'));
+        return redirect(route('siravel.files.index'));
     }
 
     /**
@@ -218,12 +218,12 @@ class FilesController extends QuarxController
      */
     public function apiList(Request $request)
     {
-        if (Config::get('quarx.api-key') != $request->header('quarx')) {
-            return QuarxResponseService::apiResponse('error', []);
+        if (Config::get('siravel.api-key') != $request->header('siravel')) {
+            return SiravelResponseService::apiResponse('error', []);
         }
 
         $files = $this->fileRepository->apiPrepared();
 
-        return QuarxResponseService::apiResponse('success', $files);
+        return SiravelResponseService::apiResponse('success', $files);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Yab\Quarx\Services;
+namespace Sitec\Siravel\Services;
 
 use CryptoService as CryptoServiceForFiles;
 use Exception;
@@ -54,7 +54,7 @@ class FileService
             }
         }
 
-        Storage::disk(Config::get('quarx.storage-location', 'local'))->put($directory.$newFileName.'.'.$extension, file_get_contents($fileName));
+        Storage::disk(Config::get('siravel.storage-location', 'local'))->put($directory.$newFileName.'.'.$extension, file_get_contents($fileName));
 
         return [
             'original' => basename($fileName),
@@ -84,7 +84,7 @@ class FileService
             return false;
         }
 
-        if (File::size($file) > Config::get('quarx.max-file-upload-size', 6291456)) {
+        if (File::size($file) > Config::get('siravel.max-file-upload-size', 6291456)) {
             throw new Exception('This file is too large', 1);
         }
 
@@ -102,7 +102,7 @@ class FileService
             }
         }
 
-        Storage::disk(Config::get('quarx.storage-location', 'local'))->put($directory.$newFileName.'.'.$extension, File::get($file));
+        Storage::disk(Config::get('siravel.storage-location', 'local'))->put($directory.$newFileName.'.'.$extension, File::get($file));
 
         return [
             'original' => $originalName ?: $file->getFilename().'.'.$extension,

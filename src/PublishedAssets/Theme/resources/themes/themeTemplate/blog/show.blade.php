@@ -1,4 +1,4 @@
-@extends('quarx-frontend::layout.master')
+@extends('siravel-frontend::layout.master')
 
 @section('seoDescription') {{ $blog->seo_description }} @endsection
 @section('seoKeywords') {{ $blog->seo_keywords }} @endsection
@@ -14,6 +14,6 @@
 
 @endsection
 
-@section('quarx')
+@section('siravel')
     @edit('blog', $blog->id)
 @endsection

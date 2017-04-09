@@ -1,10 +1,10 @@
-@extends('quarx-frontend::layout.master')
+@extends('siravel-frontend::layout.master')
 
 @section('content')
 
     <div class="container">
         <div class="row">
-            <h1 class="page-header">Settings</h1>
+            <h1 class="page-header">{!! trans('siravel::modules.settings') !!}</h1>
         </div>
 
         <div class="row">
@@ -16,12 +16,12 @@
                     {!! csrf_field() !!}
 
                     <div class="col-md-12 form-group">
-                        <label>Email</label>
+                        <label>{!! trans('siravel::modules.email') !!}</label>
                         <input class="form-control" type="email" name="email" value="{{ $user->email }}">
                     </div>
 
                     <div class="col-md-12 form-group">
-                       <label> Name</label>
+                       <label> {!! trans('siravel::modules.name') !!}</label>
                         <input class="form-control" type="name" name="name" value="{{ $user->name }}">
                     </div>
 
@@ -29,7 +29,7 @@
 
                     @if ($user->roles->first()->name === 'admin' || $user->id == 1)
                         <div class="col-md-12 form-group">
-                           <label> Role</label>
+                           <label> {!! trans('siravel::modules.role') !!}</label>
                             <select class="form-control" name="role">
                                 @foreach(App\Models\Role::all() as $role)
                                     <option @if($user->roles->first()->id === $role->id) selected @endif value="{{ $role->name }}">{{ $role->label }}</option>
@@ -39,9 +39,9 @@
                     @endif
 
                     <div class="col-md-12 form-group">
-                        <a class="btn btn-default pull-left" href="{{ URL::previous() }}">Cancel</a>
-                        <button class="btn btn-primary pull-right" type="submit">Save</button>
-                        <a class="btn btn-info pull-right" href="/user/password">Change Password</a><br>
+                        <a class="btn btn-default pull-left" href="{{ URL::previous() }}">{!! trans('siravel::modules.cancel') !!}</a>
+                        <button class="btn btn-primary pull-right" type="submit">{!! trans('siravel::modules.save') !!}</button>
+                        <a class="btn btn-info pull-right" href="/user/password">{!! trans('siravel::modules.changePassword') !!}</a><br>
                     </div>
                 </form>
             </div>

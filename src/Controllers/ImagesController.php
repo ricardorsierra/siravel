@@ -1,20 +1,20 @@
 <?php
 
-namespace Yab\Quarx\Controllers;
+namespace Sitec\Siravel\Controllers;
 
 use Config;
 use CryptoService;
 use FileService;
 use Illuminate\Http\Request;
-use Quarx;
+use Siravel;
 use Storage;
-use Yab\Quarx\Models\Image;
-use Yab\Quarx\Repositories\ImageRepository;
-use Yab\Quarx\Requests\ImagesRequest;
-use Yab\Quarx\Services\QuarxResponseService;
-use Yab\Quarx\Services\ValidationService;
+use Sitec\Siravel\Models\Image;
+use Sitec\Siravel\Repositories\ImageRepository;
+use Sitec\Siravel\Requests\ImagesRequest;
+use Sitec\Siravel\Services\SiravelResponseService;
+use Sitec\Siravel\Services\ValidationService;
 
-class ImagesController extends QuarxController
+class ImagesController extends SiravelController
 {
     /** @var ImageRepository */
     private $imagesRepository;
@@ -37,7 +37,7 @@ class ImagesController extends QuarxController
 
         $result = $this->imagesRepository->paginated();
 
-        return view('quarx::modules.images.index')
+        return view('siravel::modules.images.index')
             ->with('images', $result)
             ->with('pagination', $result->render());
     }
@@ -55,7 +55,7 @@ class ImagesController extends QuarxController
 
         $result = $this->imagesRepository->search($input);
 
-        return view('quarx::modules.images.index')
+        return view('siravel::modules.images.index')
             ->with('images', $result[0]->get())
             ->with('pagination', $result[2])
             ->with('term', $result[1]);
@@ -68,7 +68,7 @@ class ImagesController extends QuarxController
      */
     public function create()
     {
-        return view('quarx::modules.images.create');
+        return view('siravel::modules.images.create');
     }
 
     /**
@@ -91,21 +91,21 @@ class ImagesController extends QuarxController
                     ]);
                 }
 
-                Quarx::notification('Image saved successfully.', 'success');
+                Siravel::notification('Image saved successfully.', 'success');
 
                 if (!$imageSaved) {
-                    Quarx::notification('Image was not saved.', 'danger');
+                    Siravel::notification('Image was not saved.', 'danger');
                 }
             } else {
-                Quarx::notification('Image could not be saved', 'danger');
+                Siravel::notification('Image could not be saved', 'danger');
 
                 return $validation['redirect'];
             }
         } catch (Exception $e) {
-            Quarx::notification($e->getMessage() ?: 'Image could not be saved.', 'danger');
+            Siravel::notification($e->getMessage() ?: 'Image could not be saved.', 'danger');
         }
 
-        return redirect(route('quarx.images.index'));
+        return redirect(route('siravel.images.index'));
     }
 
     /**
@@ -127,9 +127,9 @@ class ImagesController extends QuarxController
             $fileSaved['name'] = CryptoService::encrypt($fileSaved['name']);
             $fileSaved['mime'] = $file->getClientMimeType();
             $fileSaved['size'] = $file->getClientSize();
-            $response = QuarxResponseService::apiResponse('success', $fileSaved);
+            $response = SiravelResponseService::apiResponse('success', $fileSaved);
         } else {
-            $response = QuarxResponseService::apiErrorResponse($validation['errors'], $validation['inputs']);
+            $response = SiravelResponseService::apiErrorResponse($validation['errors'], $validation['inputs']);
         }
 
         return $response;
@@ -147,12 +147,12 @@ class ImagesController extends QuarxController
         $images = $this->imagesRepository->findImagesById($id);
 
         if (empty($images)) {
-            Quarx::notification('Image not found', 'warning');
+            Siravel::notification('Image not found', 'warning');
 
-            return redirect(route('quarx.images.index'));
+            return redirect(route('siravel.images.index'));
         }
 
-        return view('quarx::modules.images.edit')->with('images', $images);
+        return view('siravel::modules.images.edit')->with('images', $images);
     }
 
     /**
@@ -168,24 +168,24 @@ class ImagesController extends QuarxController
         try {
             $images = $this->imagesRepository->findImagesById($id);
 
-            Quarx::notification('Image updated successfully.', 'success');
+            Siravel::notification('Image updated successfully.', 'success');
 
             if (empty($images)) {
-                Quarx::notification('Image not found', 'warning');
+                Siravel::notification('Image not found', 'warning');
 
-                return redirect(route('quarx.images.index'));
+                return redirect(route('siravel.images.index'));
             }
 
             $images = $this->imagesRepository->update($images, $request->all());
 
             if (!$images) {
-                Quarx::notification('Image could not be updated', 'danger');
+                Siravel::notification('Image could not be updated', 'danger');
             }
         } catch (Exception $e) {
-            Quarx::notification($e->getMessage() ?: 'Image could not be saved.', 'danger');
+            Siravel::notification($e->getMessage() ?: 'Image could not be saved.', 'danger');
         }
 
-        return redirect(route('quarx.images.edit', $id));
+        return redirect(route('siravel.images.edit', $id));
     }
 
     /**
@@ -204,16 +204,16 @@ class ImagesController extends QuarxController
         }
 
         if (empty($image)) {
-            Quarx::notification('Image not found', 'warning');
+            Siravel::notification('Image not found', 'warning');
 
-            return redirect(route('quarx.images.index'));
+            return redirect(route('siravel.images.index'));
         }
 
         $image->delete();
 
-        Quarx::notification('Image deleted successfully.', 'success');
+        Siravel::notification('Image deleted successfully.', 'success');
 
-        return redirect(route('quarx.images.index'));
+        return redirect(route('siravel.images.index'));
     }
 
     /*
@@ -229,13 +229,13 @@ class ImagesController extends QuarxController
      */
     public function apiList(Request $request)
     {
-        if (Config::get('quarx.api-key') != $request->header('quarx')) {
-            return QuarxResponseService::apiResponse('error', []);
+        if (Config::get('siravel.api-key') != $request->header('siravel')) {
+            return SiravelResponseService::apiResponse('error', []);
         }
 
         return $this->imagesRepository->apiPrepared();
 
-        return QuarxResponseService::apiResponse('success', $images);
+        return SiravelResponseService::apiResponse('success', $images);
     }
 
     /**
@@ -249,6 +249,6 @@ class ImagesController extends QuarxController
     {
         $image = $this->imagesRepository->apiStore($request->all());
 
-        return QuarxResponseService::apiResponse('success', $image);
+        return SiravelResponseService::apiResponse('success', $image);
     }
 }

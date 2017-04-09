@@ -1,8 +1,8 @@
 <div class="row">
     <ol class="breadcrumb">
-        <li><a href="{!! url('quarx/blog') !!}">Blog</a></li>
+        <li><a href="{!! url('siravel/blog') !!}">{!! trans('siravel::modules.blog') !!}</a></li>
 
-            {!! Quarx::breadcrumbs($location) !!}
+            {!! Siravel::breadcrumbs($location) !!}
 
         <li class="active"></li>
     </ol>

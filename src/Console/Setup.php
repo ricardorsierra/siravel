@@ -1,6 +1,6 @@
 <?php
 
-namespace Yab\Quarx\Console;
+namespace Sitec\Siravel\Console;
 
 use Artisan;
 use App\Models\Role;
@@ -9,7 +9,7 @@ use App\Services\UserService;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Config;
-use Yab\Laracogs\Traits\FileMakerTrait;
+use Sitec\Laracogs\Traits\FileMakerTrait;
 
 class Setup extends Command
 {
@@ -20,14 +20,14 @@ class Setup extends Command
      *
      * @var string
      */
-    protected $signature = 'quarx:setup';
+    protected $signature = 'siravel:setup';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Quarx will setup your site';
+    protected $description = 'Siravel will setup your site';
 
     /**
      * Execute the console command.
@@ -40,12 +40,12 @@ class Setup extends Command
 
         if ($cssReady) {
             Artisan::call('vendor:publish', [
-                '--provider' => 'Yab\Quarx\QuarxProvider',
+                '--provider' => 'Sitec\Siravel\SiravelProvider',
                 '--force' => true,
             ]);
 
             Artisan::call('vendor:publish', [
-                '--provider' => 'Yab\Laracogs\LaracogsProvider',
+                '--provider' => 'Sitec\Laracogs\LaracogsProvider',
                 '--force' => true,
             ]);
 
@@ -130,7 +130,7 @@ class Setup extends Command
             }
             $service->create($user, 'admin', 'admin', false);
 
-            $this->info('Finished setting up your site with Quarx!');
+            $this->info('Finished setting up your site with Siravel!');
             $this->info('Please run:');
             $this->comment('npm install');
             $this->comment('npm run dev');
@@ -179,16 +179,16 @@ class Setup extends Command
 
         // Route setup
         $routeContents = file_get_contents(app_path('Providers/RouteServiceProvider.php'));
-        $routeContents = str_replace("->group(base_path('routes/web.php'));", "->group(function() { \n\t\t\trequire base_path('routes/web.php');\n\t\t\trequire base_path('routes/quarx.php'); });", $routeContents);
+        $routeContents = str_replace("->group(base_path('routes/web.php'));", "->group(function() { \n\t\t\trequire base_path('routes/web.php');\n\t\t\trequire base_path('routes/siravel.php'); });", $routeContents);
         file_put_contents(app_path('Providers/RouteServiceProvider.php'), $routeContents);
 
         $routeToDashboardContents = file_get_contents(base_path('routes/web.php'));
-        $routeToDashboardContents = str_replace("Route::get('/dashboard', 'PagesController@dashboard');", "Route::get('/dashboard', function(){ return Redirect::to('quarx/dashboard'); });", $routeToDashboardContents);
+        $routeToDashboardContents = str_replace("Route::get('/dashboard', 'PagesController@dashboard');", "Route::get('/dashboard', function(){ return Redirect::to('siravel/dashboard'); });", $routeToDashboardContents);
         file_put_contents(base_path('routes/web.php'), $routeToDashboardContents);
 
         // Kernel setup
         $routeContents = file_get_contents(app_path('Http/Kernel.php'));
-        $routeContents = str_replace("'auth' => \Illuminate\Auth\Middleware\Authenticate::class,", "'auth' => \Illuminate\Auth\Middleware\Authenticate::class,\n\t\t'quarx' => \App\Http\Middleware\Quarx::class,\n\t\t'quarx-api' => \App\Http\Middleware\QuarxApi::class,\n\t\t'quarx-analytics' => \Yab\Quarx\Middleware\QuarxAnalytics::class,\n\t\t'quarx-language' => \App\Http\Middleware\QuarxLanguage::class,\n\t\t'admin' => \App\Http\Middleware\Admin::class,\n\t\t'active' => \App\Http\Middleware\Active::class,", $routeContents);
+        $routeContents = str_replace("'auth' => \Illuminate\Auth\Middleware\Authenticate::class,", "'auth' => \Illuminate\Auth\Middleware\Authenticate::class,\n\t\t'siravel' => \App\Http\Middleware\Siravel::class,\n\t\t'siravel-api' => \App\Http\Middleware\SiravelApi::class,\n\t\t'siravel-analytics' => \Sitec\Siravel\Middleware\SiravelAnalytics::class,\n\t\t'siravel-language' => \App\Http\Middleware\SiravelLanguage::class,\n\t\t'admin' => \App\Http\Middleware\Admin::class,\n\t\t'active' => \App\Http\Middleware\Active::class,", $routeContents);
         file_put_contents(app_path('Http/Kernel.php'), $routeContents);
 
         $fileSystem = new Filesystem();
@@ -207,7 +207,7 @@ class Setup extends Command
 
         // AuthProviders
         $authProviderContents = file_get_contents(app_path('Providers/AuthServiceProvider.php'));
-        $authProviderContents = str_replace('$this->registerPolicies();', "\$this->registerPolicies();\n\t\t\Gate::define('quarx', function (\$user) {\n\t\t\treturn (\$user->roles->first()->name === 'admin');\n\t\t});\n\t\t\Gate::define('admin', function (\$user) {\n\t\t\treturn (\$user->roles->first()->name === 'admin');\n\t\t});", $authProviderContents);
+        $authProviderContents = str_replace('$this->registerPolicies();', "\$this->registerPolicies();\n\t\t\Gate::define('siravel', function (\$user) {\n\t\t\treturn (\$user->roles->first()->name === 'admin');\n\t\t});\n\t\t\Gate::define('admin', function (\$user) {\n\t\t\treturn (\$user->roles->first()->name === 'admin');\n\t\t});", $authProviderContents);
         file_put_contents(app_path('Providers/AuthServiceProvider.php'), $authProviderContents);
 
         // Remove the teams
@@ -328,7 +328,7 @@ public function leaveAllTeams($userId)
         file_put_contents(base_path('resources/assets/sass/app.scss'), $css);
 
         $composer = file_get_contents(base_path('composer.json'));
-        $composer = str_replace('"App\\": "app/",', '"App\\": "app/",'."\n".'"Quarx\\Modules\\": "quarx/modules/",', $composer);
+        $composer = str_replace('"App\\": "app/",', '"App\\": "app/",'."\n".'"Siravel\\Modules\\": "siravel/modules/",', $composer);
         file_put_contents(base_path('composer.json'), $composer);
     }
 

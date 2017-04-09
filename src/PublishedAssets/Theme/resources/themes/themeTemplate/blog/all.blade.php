@@ -1,15 +1,15 @@
-@extends('quarx-frontend::layout.master')
+@extends('siravel-frontend::layout.master')
 
 @section('content')
 
 <div class="container">
 
-    <h1>Blog</h1>
+    <h1>{!! trans('siravel::modules.blog') !!}</h1>
 
     <div class="row">
         <div class="col-md-8">
             @foreach($blogs as $blog)
-                @if (config('app.locale') !== config('quarx.default-language'))
+                @if (config('app.locale') !== config('siravel.default-language'))
                     @if ($blog->translation(config('app.locale')))
                         <a href="{!! URL::to('blog/'.$blog->translation(config('app.locale'))->data->url) !!}"><p>{!! $blog->translation(config('app.locale'))->data->title !!} - <span>{!! $blog->published_at !!}</span></p></a>
                     @endif
@@ -32,6 +32,6 @@
 
 @endsection
 
-@section('quarx')
+@section('siravel')
     @edit('blog')
 @endsection

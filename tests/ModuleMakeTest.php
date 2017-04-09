@@ -1,7 +1,7 @@
 <?php
 
 use org\bovigo\vfs\vfsStream;
-use Yab\CrudMaker\Generators\CrudGenerator;
+use Sitec\CrudMaker\Generators\CrudGenerator;
 
 class CrudSingleGeneratorTest extends PHPUnit_Framework_TestCase
 {

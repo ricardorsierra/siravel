@@ -1,9 +1,9 @@
 <?php
 
-namespace Yab\Quarx\Repositories;
+namespace Sitec\Siravel\Repositories;
 
 use Carbon\Carbon;
-use Yab\Quarx\Models\Translation;
+use Sitec\Siravel\Models\Translation;
 
 class TranslationRepository
 {

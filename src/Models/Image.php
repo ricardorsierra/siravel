@@ -1,6 +1,6 @@
 <?php
 
-namespace Yab\Quarx\Models;
+namespace Sitec\Siravel\Models;
 
 use Carbon\Carbon;
 use Config;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Intervention\Image\ImageManagerStatic as InterventionImage;
 use Storage;
 
-class Image extends QuarxModel
+class Image extends SiravelModel
 {
     public $table = 'images';
 
@@ -80,7 +80,7 @@ class Image extends QuarxModel
             if ($this->isLocalFile()) {
                 $imagePath = storage_path('app/'.$this->location);
             } else {
-                $imagePath = Storage::disk(config('quarx.storage-location', 'local'))->url($this->location);
+                $imagePath = Storage::disk(config('siravel.storage-location', 'local'))->url($this->location);
             }
 
             $image = InterventionImage::make($imagePath)->resize(800, null);

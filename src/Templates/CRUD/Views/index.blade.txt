@@ -1,4 +1,4 @@
-@extends('quarx::layouts.dashboard')
+@extends('siravel::layouts.dashboard')
 
 @section('content')
 
@@ -13,18 +13,18 @@
                     <p>Are you sure want to delete this _camel_case_?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <a id="deleteBtn" type="button" class="btn btn-warning" href="#">Confirm Delete</a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{!! trans('siravel::modules.close') !!}</button>
+                    <a id="deleteBtn" type="button" class="btn btn-warning" href="#">{!! trans('siravel::modules.confirmDelete') !!}</a>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <a class="btn btn-primary pull-right" href="{!! route('quarx._lower_casePlural_.create') !!}">Add New</a>
+        <a class="btn btn-primary pull-right" href="{!! route('siravel._lower_casePlural_.create') !!}">{!! trans('siravel::modules.addNew') !!}</a>
         <div class="pull-right raw-margin-right-24">
-            {!! Form::open(['url' => 'quarx/_lower_casePlural_/search']) !!}
-            <input class="form-control form-inline pull-right" name="search" placeholder="Search">
+            {!! Form::open(['url' => 'siravel/_lower_casePlural_/search']) !!}
+            <input class="form-control form-inline pull-right" name="search" placeholder="{!! trans('siravel::modules.search') !!}">
             {!! Form::close() !!}
         </div>
         <h1 class="page-header">_camel_casePlural_</h1>
@@ -43,22 +43,22 @@
             <table class="table table-striped">
                 <thead>
                     <th>Name</th>
-                    <th width="200px" class="text-right">Actions</th>
+                    <th width="200px" class="text-right">{!! trans('siravel::modules.actions') !!}</th>
                 </thead>
                 <tbody>
 
                 @foreach($_lower_casePlural_ as $_lower_case_)
                     <tr>
                         <td>
-                            <a href="{!! route('quarx._lower_casePlural_.edit', [$_lower_case_->id]) !!}">{!! $_lower_case_->name !!}</a>
+                            <a href="{!! route('siravel._lower_casePlural_.edit', [$_lower_case_->id]) !!}">{!! $_lower_case_->name !!}</a>
                         </td>
                         <td class="text-right">
                             <form method="post" action="{!! url('_sectionPrefix__lower_casePlural_/'.$_lower_case_->id) !!}">
                                 {!! csrf_field() !!}
                                 {!! method_field('DELETE') !!}
-                                <button class="delete-btn btn btn-xs btn-danger pull-right" type="submit"><i class="fa fa-trash"></i> Delete</button>
+                                <button class="delete-btn btn btn-xs btn-danger pull-right" type="submit"><i class="fa fa-trash"></i> {!! trans('siravel::modules.delete') !!}</button>
                             </form>
-                            <a class="btn btn-xs btn-default raw-margin-right-8 pull-right" href="{!! route('quarx._lower_casePlural_.edit', [$_lower_case_->id]) !!}"><i class="fa fa-pencil"></i> Edit</a>
+                            <a class="btn btn-xs btn-default raw-margin-right-8 pull-right" href="{!! route('siravel._lower_casePlural_.edit', [$_lower_case_->id]) !!}"><i class="fa fa-pencil"></i> {!! trans('siravel::modules.edit') !!}</a>
                         </td>
                     </tr>
                 @endforeach

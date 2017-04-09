@@ -60,30 +60,30 @@ $(function() {
 |--------------------------------------------------------------------------
 */
 
-function quarxNotify(message, _type) {
-    $(".quarx-notification").css("display", "block");
-    $(".quarx-notification").addClass(_type);
+function siravelNotify(message, _type) {
+    $(".siravel-notification").css("display", "block");
+    $(".siravel-notification").addClass(_type);
 
-    $(".quarx-notify-comment").html(message);
-    $(".quarx-notification").animate({
+    $(".siravel-notify-comment").html(message);
+    $(".siravel-notification").animate({
         right: "20px",
     });
 
-    $(".quarx-notify-closer-icon").click(function(){
-        $(".quarx-notification").animate({
+    $(".siravel-notify-closer-icon").click(function(){
+        $(".siravel-notification").animate({
             right: "-300px"
         },"", function(){
-            $(".quarx-notification").css("display", "none");
-            $(".quarx-notify-comment").html("");
+            $(".siravel-notification").css("display", "none");
+            $(".siravel-notify-comment").html("");
         });
     });
 
     setTimeout(function(){
-        $(".quarx-notification").animate({
+        $(".siravel-notification").animate({
             right: "-300px"
         },"", function(){
-            $(".quarx-notification").css("display", "none");
-            $(".quarx-notify-comment").html("");
+            $(".siravel-notification").css("display", "none");
+            $(".siravel-notify-comment").html("");
         });
     }, 8000);
 }
@@ -118,7 +118,7 @@ var typeaheadMatcher = function(strs) {
 
 /*
 |--------------------------------------------------------------------------
-| Quarx JS
+| Siravel JS
 |--------------------------------------------------------------------------
 */
 
@@ -133,8 +133,8 @@ var _redactorConfig = {
     paragraphize: false,
     pastePlaintext: true,
     deniedTags: ['script'],
-    imageManagerJson: _url+'/quarx/api/images/list',
-    fileManagerJson: _url+'/quarx/api/files/list',
+    imageManagerJson: _url+'/siravel/api/images/list',
+    fileManagerJson: _url+'/siravel/api/files/list',
     stockImageManagerJson: 'https://pixabay.com/api/',
     plugins: ['table','video', 'fontcolor', 'imagemanager', 'stockimagemanager', 'filemanager', 'specialchar'],
     buttons: ['html', 'formatting', 'fontcolor', 'bold', 'italic', 'underline', 'deleted', 'unorderedlist', 'orderedlist',
@@ -16236,7 +16236,7 @@ RedactorPlugins.filemanager = function()
             + '<span class="btn btn-default"><span class="fa fa-search"></span></span>'
             + '</span>'
             + '</div>'
-            + '<div id="filemanager-container" class="raw-block-400 quarx-row raw-margin-top-24" style="overflow: scroll;">Loading your file collection...</div>'
+            + '<div id="filemanager-container" class="raw-block-400 siravel-row raw-margin-top-24" style="overflow: scroll;">Loading your file collection...</div>'
             + '</section>';
         },
         init: function()
@@ -16262,7 +16262,7 @@ RedactorPlugins.filemanager = function()
                 dataType: "json",
                 cache: false,
                 headers: {
-                    Quarx: _apiKey,
+                    Siravel: _apiKey,
                     Authorization: 'Bearer '+_apiToken
                 },
                 url: this.opts.fileManagerJson,
@@ -16465,7 +16465,7 @@ RedactorPlugins.imagemanager = function()
                 dataType: "json",
                 cache: false,
                 headers: {
-                    Quarx: _apiKey,
+                    Siravel: _apiKey,
                     Authorization: 'Bearer '+_apiToken
                 },
                 url: this.opts.imageManagerJson,
@@ -16519,8 +16519,8 @@ RedactorPlugins.stockimagemanager = function()
             + '<button class="btn btn-default" type="button" id="stockimagemanager-search"><span class="fa fa-search"></span></button>'
             + '</span>'
             + '</div>'
-            + '<div id="stockimagemanager-container" class="raw-block-300 quarx-row raw-margin-top-24 raw-margin-bottom-24" style="overflow: scroll;"></div>'
-            + '<div id="stockimagemanager-links" class="raw-block-20 quarx-row"><button id="stockImgPrevBtn" class="btn btn-default pull-left">Prev</button><button id="stockImgNextBtn" class="pull-right btn btn-default">Next</button></div>'
+            + '<div id="stockimagemanager-container" class="raw-block-300 siravel-row raw-margin-top-24 raw-margin-bottom-24" style="overflow: scroll;"></div>'
+            + '<div id="stockimagemanager-links" class="raw-block-20 siravel-row"><button id="stockImgPrevBtn" class="btn btn-default pull-left">Prev</button><button id="stockImgNextBtn" class="pull-right btn btn-default">Next</button></div>'
             + '<div><a href="https://pixabay.com/"><img class="raw100 raw-margin-top-24" src="https://pixabay.com/static/img/public/leaderboard_a.png" alt="Pixabay"> </a></div>'
             + '</section>';
         },
@@ -16626,7 +16626,7 @@ RedactorPlugins.stockimagemanager = function()
                     _token: _token,
                     location: $(e.target).attr('data-url')
                 },
-                url: _url + '/quarx/api/images/store',
+                url: _url + '/siravel/api/images/store',
                 error: function(data){
                     console.log(data)
                 },
@@ -17237,7 +17237,7 @@ Dropzone.options.fileDropzone = {
             if (! file.serverData) {
                 return;
             } else {
-                $.get(_url+"/quarx/files/remove/"+file.serverData.name);
+                $.get(_url+"/siravel/files/remove/"+file.serverData.name);
                 $("#file_"+file.serverData.name).remove();
             }
         });

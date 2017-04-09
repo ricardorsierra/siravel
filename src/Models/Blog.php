@@ -1,11 +1,11 @@
 <?php
 
-namespace Yab\Quarx\Models;
+namespace Sitec\Siravel\Models;
 
-use Yab\Quarx\Services\Normalizer;
-use Yab\Quarx\Traits\Translatable;
+use Sitec\Siravel\Services\Normalizer;
+use Sitec\Siravel\Traits\Translatable;
 
-class Blog extends QuarxModel
+class Blog extends SiravelModel
 {
     use Translatable;
 

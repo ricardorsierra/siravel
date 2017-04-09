@@ -1,8 +1,8 @@
 <?php
 
-namespace Yab\Quarx\Models;
+namespace Sitec\Siravel\Models;
 
-class Analytics extends QuarxModel
+class Analytics extends SiravelModel
 {
     public $table = 'analytics';
 

@@ -10,7 +10,7 @@ class CreateWidgetsTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('quarx.db-prefix', '').'widgets', function (Blueprint $table) {
+        Schema::create(config('siravel.db-prefix', '').'widgets', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('slug');
@@ -24,6 +24,6 @@ class CreateWidgetsTable extends Migration
      */
     public function down()
     {
-        Schema::drop(config('quarx.db-prefix', '').'widgets');
+        Schema::drop(config('siravel.db-prefix', '').'widgets');
     }
 }

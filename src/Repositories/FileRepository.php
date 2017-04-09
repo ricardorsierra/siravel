@@ -1,12 +1,12 @@
 <?php
 
-namespace Yab\Quarx\Repositories;
+namespace Sitec\Siravel\Repositories;
 
 use Auth;
 use Config;
 use CryptoService;
-use Yab\Quarx\Models\File;
-use Yab\Quarx\Services\FileService;
+use Sitec\Siravel\Models\File;
+use Sitec\Siravel\Services\FileService;
 use Illuminate\Support\Facades\Schema;
 
 class FileRepository
@@ -36,7 +36,7 @@ class FileRepository
             $model = $model->orderBy('created_at', 'desc');
         }
 
-        return $model->paginate(Config::get('quarx.pagination', 25));
+        return $model->paginate(Config::get('siravel.pagination', 25));
     }
 
     /**
@@ -57,7 +57,7 @@ class FileRepository
             $query->orWhere($attribute, 'LIKE', '%'.$input['term'].'%');
         }
 
-        return [$query, $input['term'], $query->paginate(Config::get('quarx.pagination', 25))->render()];
+        return [$query, $input['term'], $query->paginate(Config::get('siravel.pagination', 25))->render()];
     }
 
     /**

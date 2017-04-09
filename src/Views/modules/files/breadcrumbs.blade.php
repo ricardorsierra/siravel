@@ -1,6 +1,6 @@
 <div class="row">
     <ol class="breadcrumb">
-        <li><a href="{!! url('quarx/files') !!}">Files</a></li>
+        <li><a href="{!! url('siravel/files') !!}">{!! trans('siravel::modules.files') !!}</a></li>
 
         @foreach($location as $local)
 

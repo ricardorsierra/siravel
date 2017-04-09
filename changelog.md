@@ -1,4 +1,4 @@
-# Change Log - Quarx
+# Change Log - Siravel
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 ----
@@ -112,7 +112,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [v2.2.6] - 2016-12-05
 
 ### Added
-- New db-prefix option for quarx tables
+- New db-prefix option for siravel tables
 - New live preview in editor view
 
 ### Fixed
@@ -274,7 +274,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v1.4.12] - 2016-06-23
 ### Fixed
-- Issue with quick install and missing Quarx in composer.json
+- Issue with quick install and missing Siravel in composer.json
 
 ## [v1.4.11] - 2016-06-22
 ### Changed

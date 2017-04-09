@@ -1,4 +1,4 @@
-@extends('quarx::layouts.master')
+@extends('siravel::layouts.master')
 
 @section('navigation')
 
@@ -9,10 +9,10 @@
             <span class="fa fa-close nav-close"></span>
         </button>
         <span class="navbar-brand">
-            <span class="quarx-logo"></span> {{ config('quarx.backend-title', 'Quarx') }}
+            <span class="siravel-logo"></span> {{ config('siravel.backend-title', 'Siravel') }}
         </span>
         @if (Auth::user())
-        <p class="navbar-text navbar-left raw-m-hide">Signed in as {{ Auth::user()->name }}</p>
+        <p class="navbar-text navbar-left raw-m-hide">{!! trans('siravel::modules.signedInAs', ['authName' => Auth::user()->name]) !!}</p>
         @endif
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavbar">
             <span class="fa fa-gear"></span>
@@ -20,9 +20,9 @@
     </div>
     <div class="collapse navbar-collapse navbar-right" id="mainNavbar">
         <ul class="nav navbar-nav">
-            <li><a href="{{ URL::to('/') }}"><span class="fa fa-arrow-left"></span> Back To Site </a></li>
+            <li><a href="{{ URL::to('/') }}"><span class="fa fa-arrow-left"></span> {!! trans('siravel::modules.backToSite') !!} </a></li>
             @if (Auth::user())
-            <li><a href="/logout"><span class="fa fa-sign-out"></span> Logout</a></li>
+            <li><a href="/logout"><span class="fa fa-sign-out"></span> {!! trans('siravel::modules.logout') !!}</a></li>
             @endif
         </ul>
     </div>

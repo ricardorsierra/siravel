@@ -1,12 +1,12 @@
 <?php
 
-namespace Yab\Quarx\Services;
+namespace Sitec\Siravel\Services;
 
 class ModuleService
 {
     public function menus()
     {
-        $modulePath = base_path(config('quarx.module-directory').'/');
+        $modulePath = base_path(config('siravel.module-directory').'/');
         $modules = glob($modulePath.'*');
 
         $menu = '';
@@ -20,8 +20,8 @@ class ModuleService
             }
         }
 
-        if (is_array(config('quarx.modules'))) {
-            foreach (config('quarx.modules') as $module => $config) {
+        if (is_array(config('siravel.modules'))) {
+            foreach (config('siravel.modules') as $module => $config) {
                 if (!is_dir($modulePath.ucfirst($module))) {
                     $menu .= view($module.'::menu');
                 }

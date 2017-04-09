@@ -1,6 +1,6 @@
 <?php
 
-namespace Yab\Quarx\Facades;
+namespace Sitec\Siravel\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

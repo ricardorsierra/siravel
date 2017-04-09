@@ -1,4 +1,4 @@
-@extends('quarx::layouts.dashboard')
+@extends('siravel::layouts.dashboard')
 
 @section('content')
 
@@ -9,13 +9,13 @@
     @include('_lower_casePlural_::_lower_casePlural_.breadcrumbs', ['location' => ['create']])
 
      <div class="row">
-        {!! Form::open(['route' => 'quarx._lower_casePlural_.store', '_lower_casePlural_' => true, 'class' => 'add']); !!}
+        {!! Form::open(['route' => 'siravel._lower_casePlural_.store', '_lower_casePlural_' => true, 'class' => 'add']); !!}
 
-            {!! FormMaker::fromTable('_lower_casePlural_', Quarx::moduleConfig('_lower_casePlural_', '_lower_casePlural_')) !!}
+            {!! FormMaker::fromTable('_lower_casePlural_', Siravel::moduleConfig('_lower_casePlural_', '_lower_casePlural_')) !!}
 
             <div class="form-group text-right">
-                <a href="{!! URL::to('quarx/_lower_casePlural_') !!}" class="btn btn-default raw-left">Cancel</a>
-                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+                <a href="{!! URL::to('siravel/_lower_casePlural_') !!}" class="btn btn-default raw-left">{!! trans('siravel::modules.cancel') !!}</a>
+                {!! Form::submit(trans('siravel::modules.save'), ['class' => 'btn btn-primary']) !!}
             </div>
 
         {!! Form::close() !!}

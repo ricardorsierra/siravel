@@ -1,21 +1,16 @@
 {
-    "name": "yab/quarx",
-    "description": "Add a CMS to any Laravel apps gain control of: pages, blogs, galleries, events, custom modules, images and more.",
+    "name": "sitec/siravel",
+    "description": "Add to any Laravel.",
     "license": "MIT",
     "authors": [
         {
-            "name": "Matt Lantz",
-            "email": "matt@yabhq.com"
-        },
-        {
-            "name": "Chris Blackwell",
-            "email": "chris@yabhq.com"
+            "name": "Ricardo Rebello Sierra",
+            "email": "ricardo@sierratecnologia.com.br"
         }
     ],
     "require": {
         "php": ">=5.6.4",
         "illuminate/support": "5.4.*",
-        "yab/laracogs": "2.2.*",
         "devfactory/minify": "1.0.*",
         "spatie/laravel-analytics": "^1.4",
         "aws/aws-sdk-php": "^3.18",
@@ -23,21 +18,54 @@
         "graham-campbell/markdown": "^7.1",
         "intervention/image": "^2.3",
         "stichoza/google-translate-php": "^3.2",
-        "donatj/phpuseragentparser": "^0.5.3"
+        "donatj/phpuseragentparser": "^0.5.3",
+
+
+        "laravelcollective/html": "^5.2.0",
+
+        "laravel/socialite": "^2.0",
+        "google/recaptcha": "~1.1",
+        "predis/predis": "^1.1",
+        "inani/larapoll": "^1.0",
+
+        "infyomlabs/adminlte-templates": "5.3.x-dev",
+        "jlapp/swaggervel": "dev-master",
+        "doctrine/dbal": "~2.3",
+        "amranidev/scaffold-interface": "^1.7",
+
+        "devfactory/minify": "1.0.*",
+        "illuminate/support": "5.4.*",
+        "aws/aws-sdk-php": "^3.18",
+        "league/flysystem-aws-s3-v3": "^1.0",
+        "intervention/image": "^2.3",
+        "stichoza/google-translate-php": "^3.2",
+        "donatj/phpuseragentparser": "^0.5.3",
+        "yab/crypto": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.7",
-        "mockery/mockery": "^0.9.4",
+        "phpunit/phpunit": "~6.0",
         "orchestra/testbench": "3.4.*|3.4-dev",
-        "mikey179/vfsStream": "^1.6"
+
+        "infyomlabs/laravel-generator": "5.3.x-dev",
+        "infyomlabs/swagger-generator": "dev-master",
+
+        "fzaninotto/faker": "~1.4",
+        "mockery/mockery": "0.9.*",
+        "phpspec/phpspec": "~3.0",
+        "symfony/dom-crawler": "~3.0",
+        "symfony/css-selector": "~3.0",
+        "mikey179/vfsStream": "^1.6",
+        "barryvdh/laravel-ide-helper": "dev-master",
+
+        "barryvdh/laravel-debugbar": "dev-master"
     },
     "autoload": {
         "psr-4": {
-            "Yab\\Quarx\\": "src/"
+            "Sitec\\Siravel\\": "src/"
         },
         "files": [
-          "src/Helpers/blade.php",
-          "src/Helpers/general.php"
+            "src/Helpers/blade.php",
+            "src/Helpers/general.php"
         ]
     },
     "autoload-dev": {
@@ -46,5 +74,11 @@
         ]
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://ricardosierra@bitbucket.org/sierratecnologia/laracogs.git"
+        }
+    ]
 }
