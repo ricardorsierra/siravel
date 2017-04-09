@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace Sitec\Siravel\Controllers\Auth;
 
-use App\Traits\CaptchaTrait;
+use Sitec\Siravel\Traits\CaptchaTrait;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
-use App\Traits\ActivationTrait;
+use Sitec\Siravel\Traits\ActivationTrait;
 use App\Models\User;
 use App\Models\Role;
 

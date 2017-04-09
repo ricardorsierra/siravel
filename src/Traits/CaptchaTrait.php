@@ -1,4 +1,4 @@
-<?php namespace App\Traits;
+<?php namespace Sitec\Siravel\Traits;
 
 use Input;
 use ReCaptcha\ReCaptcha;
