@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Sitec\Siravel\Controllers;
 
-use App\Traits\ActivationTrait;
-use App\Models\Activation;
+use Sitec\Siravel\Traits\ActivationTrait;
+use Sitec\Siravel\Models\Activation;
 
-class ActivateController extends Controller
+class ActivateController extends SiravelController
 {
 
     use ActivationTrait;

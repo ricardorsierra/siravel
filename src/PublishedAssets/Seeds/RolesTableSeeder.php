@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Models\Role;
+use Sitec\Siravel\Models\Role;
 
 class RolesTableSeeder extends Seeder
 {
@@ -10,6 +10,18 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('roles')->delete();
+
+        Role::create([
+            'name'   => 'user'
+        ]);
+
+        Role::create([
+            'name'   => 'administrator'
+        ]);
+
+
+
         if (!Role::where('name', 'member')->first()) {
             Role::create([
                 'name' => 'member',

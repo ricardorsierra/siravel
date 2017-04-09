@@ -14,6 +14,17 @@
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+        <style>
+            #view-source {
+                position: fixed;
+                display: block;
+                right: 0;
+                bottom: 0;
+                margin-right: 40px;
+                margin-bottom: 40px;
+                z-index: 900;
+            }
+        </style>
 
         @yield('stylesheets')
     </head>
@@ -36,6 +47,7 @@
             @else
                 <a class="btn btn-xs btn-default pull-right" href="{{ url('login') }}">{!! trans('siravel::modules.login') !!}</a>
             @endcan
+            <p class="pull-right">Desenvolvido por <a href="http://www.sierratecnologia.com.br" target="_BLANK">SierraTecnologia</a></p>
         </div>
 
     </body>

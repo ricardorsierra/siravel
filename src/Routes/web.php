@@ -64,7 +64,7 @@ Auth::routes(['login' => 'auth.login']);
 |--------------------------------------------------------------------------
 */
 
-Route::get('sitec/language/set/{language}', 'QuarxFeatureController@setLanguage');
+Route::get('sitec/language/set/{language}', 'SiravelFeatureController@setLanguage');
 
 /*
 |--------------------------------------------------------------------------
@@ -172,7 +172,6 @@ Route::group(['middleware' => 'web'], function () {
 
         Route::group(['middleware' => ['auth', 'siravel']], function () {
             Route::get('dashboard', 'DashboardController@main');
-            Route::get('help', 'HelpController@main');
 
             /*
             |--------------------------------------------------------------------------
@@ -184,23 +183,6 @@ Route::group(['middleware' => 'web'], function () {
             Route::get('rollback/{entity}/{entityId}', 'SiravelFeatureController@rollback');
             Route::get('revert/{id}', 'SiravelFeatureController@revert');
 
-            /*
-            |--------------------------------------------------------------------------
-            | Menus
-            |--------------------------------------------------------------------------
-            */
-
-            Route::resource('menus', 'MenuController', ['as' => 'siravel']);
-            Route::post('menus/search', 'MenuController@search');
-
-            /*
-            |--------------------------------------------------------------------------
-            | Links
-            |--------------------------------------------------------------------------
-            */
-
-            Route::resource('links', 'LinksController', ['except' => ['index', 'show'], 'as' => 'siravel']);
-            Route::post('links/search', 'LinksController@search');
 
             /*
             |--------------------------------------------------------------------------

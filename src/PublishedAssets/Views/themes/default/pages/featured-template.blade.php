@@ -8,8 +8,7 @@
 <div class="container">
 
     <div class="jumbotron">
-        <h1>{!! trans('siravel::modules.featuredPage') !!}</h1>
-        <h2>{{ $page->title }}</h2>
+        <h1>{{ $page->title }}</h1>
     </div>
 
     {!! $page->entry !!}

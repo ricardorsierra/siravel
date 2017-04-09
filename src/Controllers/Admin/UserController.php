@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace Sitec\Siravel\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use Sitec\Siravel\Controllers\SiravelController;
 use Hash;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class UserController extends Controller
+class UserController extends SiravelController
 {
     /**
      * Display a listing of the resource.

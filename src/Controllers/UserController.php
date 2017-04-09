@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Sitec\Siravel\Controllers;
 
-class UserController extends Controller
+class UserController extends SiravelController
 {
 
     public function getHome()

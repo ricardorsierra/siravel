@@ -109,8 +109,8 @@ return [
      * --------------------------------------------------------------------------
     */
 
-    'api-key' => env('QUARX_API_KEY', 'apis-are-cool'),
-    'api-token' => env('QUARX_API_TOKEN', 'siravel-token'),
+    'api-key' => env('SIRAVEL_API_KEY', 'apis-are-cool'),
+    'api-token' => env('SIRAVEL_API_TOKEN', 'siravel-token'),
 
     /*
      * --------------------------------------------------------------------------
