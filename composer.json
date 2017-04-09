@@ -32,7 +32,6 @@
         "predis/predis": "^1.1",
         "inani/larapoll": "^1.0",
 
-        "infyomlabs/adminlte-templates": "5.3.x-dev",
         "jlapp/swaggervel": "dev-master",
         "doctrine/dbal": "~2.3",
         "amranidev/scaffold-interface": "^1.7",
@@ -48,9 +47,6 @@
     "require-dev": {
         "phpunit/phpunit": "~6.0",
         "orchestra/testbench": "3.4.*|3.4-dev",
-
-        "infyomlabs/laravel-generator": "5.3.x-dev",
-        "infyomlabs/swagger-generator": "dev-master",
 
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",

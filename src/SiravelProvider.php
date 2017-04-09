@@ -141,8 +141,6 @@ class SiravelProvider extends ServiceProvider
         $this->app->register(\Collective\Html\HtmlServiceProvider::class);
         $this->app->register(\Laracasts\Flash\FlashServiceProvider::class);
         $this->app->register(\Prettus\Repository\Providers\RepositoryServiceProvider::class);
-        $this->app->register(\InfyOm\Generator\InfyOmGeneratorServiceProvider::class);
-        $this->app->register(\InfyOm\AdminLTETemplates\AdminLTETemplatesServiceProvider::class);
         /*
          * Generate que add depois
          */
@@ -156,6 +154,10 @@ class SiravelProvider extends ServiceProvider
          * Criptografia
          */
         $this->app->register(\Yab\Crypto\CryptoProvider::class);
+        /*
+         * Facilidades com Repositórios
+         */
+        $this->app->register(\Prettus\Repository\Providers\RepositoryServiceProvider::class);
 
 
 
