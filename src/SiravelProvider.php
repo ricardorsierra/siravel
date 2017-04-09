@@ -122,14 +122,14 @@ class SiravelProvider extends ServiceProvider
         | Register Services Providers
         |--------------------------------------------------------------------------
         */
-        $this->app->register(\SiravelServiceProvider::class);
-        $this->app->register(\SiravelEventServiceProvider::class);
-        $this->app->register(\SiravelRouteProvider::class);
-        $this->app->register(\SiravelModuleProvider::class);
+        $this->app->register(SiravelServiceProvider::class);
+        $this->app->register(SiravelEventServiceProvider::class);
+        $this->app->register(SiravelRouteProvider::class);
+        $this->app->register(SiravelModuleProvider::class);
 
-        $this->app->register(\LaracogsProvider::class);
-        $this->app->register(\MarkdownServiceProvider::class);
-        $this->app->register(\LaravelAnalyticsServiceProvider::class);
+        $this->app->register(LaracogsProvider::class);
+        $this->app->register(MarkdownServiceProvider::class);
+        $this->app->register(LaravelAnalyticsServiceProvider::class);
 
         /*
          * Minify
