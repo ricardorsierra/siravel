@@ -21,7 +21,7 @@
         "stichoza/google-translate-php": "^3.2",
         "donatj/phpuseragentparser": "^0.5.3",
 
-
+        "laracasts/flash": "^2.0.0",
         "laravelcollective/html": "^5.2.0",
 
         "laravel/socialite": "^2.0",
