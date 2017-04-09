@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": ">=5.6.4",
-        "sitec/laracogs": "2.2.*",
+        "sitec/laracogs": "dev-master",
         "illuminate/support": "5.4.*",
         "devfactory/minify": "1.0.*",
         "spatie/laravel-analytics": "^1.4",
