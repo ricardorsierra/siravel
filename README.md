@@ -41,7 +41,7 @@ Create a new Laravel application, and make a database somewhere and update the .
 * Run the following command:
 
 ```bash
-composer require yab/siravel
+composer require sitec/siravel
 ```
 
 * Add the following to your Providers array in your config/app.php file:

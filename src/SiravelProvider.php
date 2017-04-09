@@ -116,21 +116,76 @@ class SiravelProvider extends ServiceProvider
      */
     public function register()
     {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Register Services Providers
+        |--------------------------------------------------------------------------
+        */
         $this->app->register(SiravelServiceProvider::class);
         $this->app->register(SiravelEventServiceProvider::class);
         $this->app->register(SiravelRouteProvider::class);
         $this->app->register(SiravelModuleProvider::class);
 
         $this->app->register(LaracogsProvider::class);
-        $this->app->register(MinifyServiceProvider::class);
         $this->app->register(MarkdownServiceProvider::class);
         $this->app->register(LaravelAnalyticsServiceProvider::class);
 
-        $loader = AliasLoader::getInstance();
+        /*
+         * Minify
+         */
+        $this->app->register(MinifyServiceProvider::class);
+        /*
+         * Generate
+         */
+        $this->app->register(Collective\Html\HtmlServiceProvider::class);
+        $this->app->register(Laracasts\Flash\FlashServiceProvider::class);
+        $this->app->register(Prettus\Repository\Providers\RepositoryServiceProvider::class);
+        $this->app->register(\InfyOm\Generator\InfyOmGeneratorServiceProvider::class);
+        $this->app->register(\InfyOm\AdminLTETemplates\AdminLTETemplatesServiceProvider::class);
+        /*
+         * Generate que add depois
+         */
+        $this->app->register(Spatie\Permission\PermissionServiceProvider::class);
+        $this->app->register(Amranidev\ScaffoldInterface\ScaffoldInterfaceServiceProvider::class);
+        // Enquete
+        $this->app->register(Inani\Larapoll\LarapollServiceProvider::class);
+        // Debug Bar
+        $this->app->register(Barryvdh\Debugbar\ServiceProvider::class);
+        /*
+         * Criptografia
+         */
+        $this->app->register(Yab\Crypto\CryptoProvider::class);
 
-        $loader->alias('Minify', MinifyFacade::class);
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Register the Alias
+        |--------------------------------------------------------------------------
+        */
+        $loader = AliasLoader::getInstance();
         $loader->alias('Markdown', Markdown::class);
         $loader->alias('LaravelAnalytics', LaravelAnalyticsFacade::class);
+        /*
+         * Minify
+         */
+        $loader->alias('Minify', MinifyFacade::class);
+        /*
+         * Minify
+         */
+        $loader->alias('Socialite', Laravel\Socialite\Facades\Socialite::class);
+        /*
+         * DebugBar
+         */
+        $loader->alias('Debugbar', Barryvdh\Debugbar\Facade::class);
+        /*
+         * Others
+         */
+        $loader->alias('Form', Collective\Html\FormFacade::class);
+        $loader->alias('Html' , Collective\Html\HtmlFacade::class);
+        $loader->alias('Flash', Laracasts\Flash\Flash::class);
 
         /*
         |--------------------------------------------------------------------------
@@ -139,14 +194,14 @@ class SiravelProvider extends ServiceProvider
         */
 
         $this->commands([
-            ThemeGenerate::class,
-            ThemePublish::class,
-            ModulePublish::class,
-            ModuleMake::class,
-            ModuleComposer::class,
-            ModuleCrud::class,
-            Setup::class,
-            Keys::class,
+            ThemeGenerate::class);
+            ThemePublish::class);
+            ModulePublish::class);
+            ModuleMake::class);
+            ModuleComposer::class);
+            ModuleCrud::class);
+            Setup::class);
+            Keys::class);
         ]);
     }
 }
