@@ -194,14 +194,14 @@ class SiravelProvider extends ServiceProvider
         */
 
         $this->commands([
-            ThemeGenerate::class);
-            ThemePublish::class);
-            ModulePublish::class);
-            ModuleMake::class);
-            ModuleComposer::class);
-            ModuleCrud::class);
-            Setup::class);
-            Keys::class);
+            ThemeGenerate::class,
+            ThemePublish::class,
+            ModulePublish::class,
+            ModuleMake::class,
+            ModuleComposer::class,
+            ModuleCrud::class,
+            Setup::class,
+            Keys::class,
         ]);
     }
 }
