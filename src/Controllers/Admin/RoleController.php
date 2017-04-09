@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace Sitec\Siravel\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use Sitec\Siravel\Controllers\SiravelController;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 
-class RoleController extends Controller
+class RoleController extends SiravelController
 {
     /**
      * Display a listing of the resource.

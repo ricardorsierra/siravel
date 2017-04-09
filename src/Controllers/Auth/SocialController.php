@@ -5,13 +5,13 @@ namespace Sitec\Siravel\Controllers\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
-use App\Http\Controllers\Controller;
-use App\Traits\ActivationTrait;
-use App\Models\Social;
-use App\Models\User;
-use App\Models\Role;
+use Sitec\Siravel\Controllers\SiravelController;
+use Sitec\Siravel\Traits\ActivationTrait;
+use Sitec\Siravel\Models\Social;
+use Sitec\Siravel\Models\User;
+use Sitec\Siravel\Models\Role;
 
-class SocialController extends Controller
+class SocialController extends SiravelController
 {
 
     use ActivationTrait;

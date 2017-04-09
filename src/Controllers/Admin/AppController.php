@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace Sitec\Siravel\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use Sitec\Siravel\Controllers\SiravelController;
 
 /**
  * Class AppController.
  *
  * @author Amrani Houssain <amranidev@gmail.com>
  */
-class AppController extends Controller
+class AppController extends SiravelController
 {
     /**
      * Display a listing of the resource.
