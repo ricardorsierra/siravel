@@ -38,7 +38,7 @@ class SiravelProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/PublishedAssets/Views/themes' => base_path('resources/themes'),
-            __DIR__.'/PublishedAssets/Controllers' => app_path('Http/Controllers/Siravel'),
+            __DIR__.'/PublishedAssets/Controllers' => app_path('Http/Controllers'),
             __DIR__.'/PublishedAssets/Migrations' => base_path('database/migrations'),
             __DIR__.'/PublishedAssets/Seeds' => base_path('database/seeds'),
             __DIR__.'/PublishedAssets/Middleware' => app_path('Http/Middleware'),
@@ -122,14 +122,14 @@ class SiravelProvider extends ServiceProvider
         | Register Services Providers
         |--------------------------------------------------------------------------
         */
-        $this->app->register(SiravelServiceProvider::class);
-        $this->app->register(SiravelEventServiceProvider::class);
-        $this->app->register(SiravelRouteProvider::class);
-        $this->app->register(SiravelModuleProvider::class);
+        $this->app->register(\SiravelServiceProvider::class);
+        $this->app->register(\SiravelEventServiceProvider::class);
+        $this->app->register(\SiravelRouteProvider::class);
+        $this->app->register(\SiravelModuleProvider::class);
 
-        $this->app->register(LaracogsProvider::class);
-        $this->app->register(MarkdownServiceProvider::class);
-        $this->app->register(LaravelAnalyticsServiceProvider::class);
+        $this->app->register(\LaracogsProvider::class);
+        $this->app->register(\MarkdownServiceProvider::class);
+        $this->app->register(\LaravelAnalyticsServiceProvider::class);
 
         /*
          * Minify
@@ -138,24 +138,24 @@ class SiravelProvider extends ServiceProvider
         /*
          * Generate
          */
-        $this->app->register(Collective\Html\HtmlServiceProvider::class);
-        $this->app->register(Laracasts\Flash\FlashServiceProvider::class);
-        $this->app->register(Prettus\Repository\Providers\RepositoryServiceProvider::class);
+        $this->app->register(\Collective\Html\HtmlServiceProvider::class);
+        $this->app->register(\Laracasts\Flash\FlashServiceProvider::class);
+        $this->app->register(\Prettus\Repository\Providers\RepositoryServiceProvider::class);
         $this->app->register(\InfyOm\Generator\InfyOmGeneratorServiceProvider::class);
         $this->app->register(\InfyOm\AdminLTETemplates\AdminLTETemplatesServiceProvider::class);
         /*
          * Generate que add depois
          */
-        $this->app->register(Spatie\Permission\PermissionServiceProvider::class);
-        $this->app->register(Amranidev\ScaffoldInterface\ScaffoldInterfaceServiceProvider::class);
+        $this->app->register(\Spatie\Permission\PermissionServiceProvider::class);
+        $this->app->register(\Amranidev\ScaffoldInterface\ScaffoldInterfaceServiceProvider::class);
         // Enquete
-        $this->app->register(Inani\Larapoll\LarapollServiceProvider::class);
+        $this->app->register(\Inani\Larapoll\LarapollServiceProvider::class);
         // Debug Bar
-        $this->app->register(Barryvdh\Debugbar\ServiceProvider::class);
+        $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
         /*
          * Criptografia
          */
-        $this->app->register(Yab\Crypto\CryptoProvider::class);
+        $this->app->register(\Yab\Crypto\CryptoProvider::class);
 
 
 
@@ -175,17 +175,17 @@ class SiravelProvider extends ServiceProvider
         /*
          * Minify
          */
-        $loader->alias('Socialite', Laravel\Socialite\Facades\Socialite::class);
+        $loader->alias('Socialite', \Laravel\Socialite\Facades\Socialite::class);
         /*
          * DebugBar
          */
-        $loader->alias('Debugbar', Barryvdh\Debugbar\Facade::class);
+        $loader->alias('Debugbar', \Barryvdh\Debugbar\Facade::class);
         /*
          * Others
          */
-        $loader->alias('Form', Collective\Html\FormFacade::class);
-        $loader->alias('Html' , Collective\Html\HtmlFacade::class);
-        $loader->alias('Flash', Laracasts\Flash\Flash::class);
+        $loader->alias('Form', \Collective\Html\FormFacade::class);
+        $loader->alias('Html' , \Collective\Html\HtmlFacade::class);
+        $loader->alias('Flash', \Laracasts\Flash\Flash::class);
 
         /*
         |--------------------------------------------------------------------------
