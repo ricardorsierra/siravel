@@ -152,16 +152,10 @@ The basic Siravel API endpoints must carry the Siravel `apiToken` defined in the
 /siravel/api/blog/{id}
 /siravel/api/events
 /siravel/api/events/{id}
-/siravel/api/faqs
-/siravel/api/faqs/{id}
 /siravel/api/files
 /siravel/api/files/{id}
 /siravel/api/images
 /siravel/api/images/{id}
-/siravel/api/pages
-/siravel/api/pages/{id}
-/siravel/api/widgets
-/siravel/api/widgets/{id}
 ```
 
 ## License

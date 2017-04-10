@@ -10,6 +10,11 @@ use Sitec\Siravel\Models\Archive;
 
 class SiravelFeatureController extends SiravelController
 {
+    function __construct()
+    {
+        $this->middleware('web');
+    }
+
     public function sendHome()
     {
         return redirect('/');
@@ -130,7 +135,6 @@ class SiravelFeatureController extends SiravelController
     public function setLanguage(Request $request, $lang)
     {
         $request->session()->put('language', $lang);
-
         return back();
     }
 }
