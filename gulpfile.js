@@ -41,4 +41,19 @@ elixir(function(mix) {
         'modules.js',
         'dropzone-custom.js',
     ]);
+
+    // Themes
+    mix.sass(
+        [
+            '../../PublishedAssets/Views/themes/default/assets/sass/_basic.scss',
+            '../../PublishedAssets/Views/themes/default/assets/sass/_theme.scss'
+        ],
+        'src/PublishedAssets/Views/themes/default/assets/dist/layoult.css'
+    );
+    mix.scripts(
+        [
+            '../../PublishedAssets/Views/themes/default/assets/js/theme.js'
+        ],
+        'src/PublishedAssets/Views/themes/default/assets/dist/layoult.js'
+    );
 });
