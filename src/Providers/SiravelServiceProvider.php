@@ -22,7 +22,6 @@ class SiravelServiceProvider extends ServiceProvider
         $loader = AliasLoader::getInstance();
 
         $loader->alias('Siravel', \Sitec\Siravel\Facades\SiravelServiceFacade::class);
-        $loader->alias('PageService', \Sitec\Siravel\Facades\PageServiceFacade::class);
         $loader->alias('EventService', \Sitec\Siravel\Facades\EventServiceFacade::class);
         $loader->alias('CryptoService', \Sitec\Siravel\Facades\CryptoServiceFacade::class);
         $loader->alias('ModuleService', \Sitec\Siravel\Facades\ModuleServiceFacade::class);
@@ -31,10 +30,6 @@ class SiravelServiceProvider extends ServiceProvider
 
         $this->app->bind('SiravelService', function ($app) {
             return new SiravelService();
-        });
-
-        $this->app->bind('PageService', function ($app) {
-            return new PageService();
         });
 
         $this->app->bind('EventService', function ($app) {

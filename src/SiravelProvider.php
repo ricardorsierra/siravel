@@ -179,7 +179,7 @@ class SiravelProvider extends ServiceProvider
         /*
          * DebugBar
          */
-        $loader->alias('Debugbar', \Barryvdh\Debugbar\Facade::class);
+        //$loader->alias('Debugbar', \Barryvdh\Debugbar\Facade::class);
         /*
          * Others
          */

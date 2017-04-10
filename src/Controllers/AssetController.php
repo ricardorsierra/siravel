@@ -173,10 +173,16 @@ class AssetController extends SiravelController
         try {
             $path = CryptoServiceFacade::url_decode($encPath);
 
-            if (Request::get('isModule') === 'true') {
-                $filePath = $path;
-            } else {
-                $filePath = __DIR__.'/../Assets/'.$path;
+
+            // Caso exista no recurso do usuário usa ele, verifica se no path do usuário existe
+            $filePath = resource_path().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.$path;
+            // Caso não exista no recurso do usuário usa ele, usa o do modulo
+            if (!file_exists($filePath)) {
+                if (Request::get('isModule') === 'true') {
+                    $filePath = $path;
+                } else {
+                    $filePath = __DIR__.'/../Assets/'.$path;
+                }
             }
 
             $fileName = basename($filePath);
