@@ -11,7 +11,7 @@
 |
 */
 
-Route::group(['middleware' => ['siravel-language', 'siravel-analytics']], function () {
+Route::group(['middleware' => ['siravel-analytics']], function () {
     $s = 'public.';
     Route::get('/',         ['as' => $s . 'home',   'uses' => 'PagesController@getHome']);
 

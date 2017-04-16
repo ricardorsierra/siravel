@@ -9,11 +9,8 @@ class PagesController extends SiravelController
         $this->middleware('web');
     }
 
-    public function getHome()
+    public function getHome(\Illuminate\Http\Request $request)
     {
-
-        var_dump(config('app.locale'));
-        dd(config('app.locale'), $request->session()->get('language'));
         return view('pages.home');
 
     }
