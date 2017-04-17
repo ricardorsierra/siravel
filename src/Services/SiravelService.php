@@ -10,11 +10,13 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 use Sitec\Siravel\Facades\CryptoServiceFacade;
 use Sitec\Siravel\Services\Traits\DefaultModuleServiceTrait;
+use Sitec\Siravel\Services\Traits\LangServiceTrait;
 use Sitec\Siravel\Services\Traits\MenuServiceTrait;
 use Sitec\Siravel\Services\Traits\ModuleServiceTrait;
 
 class SiravelService
 {
+    use LangServiceTrait;
     use MenuServiceTrait;
     use DefaultModuleServiceTrait;
     use ModuleServiceTrait;

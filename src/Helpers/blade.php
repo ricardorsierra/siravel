@@ -7,6 +7,13 @@ if (!function_exists('menu')) {
     }
 }
 
+if (!function_exists('menu_lang')) {
+    function menu_lang()
+    {
+        return app('SiravelService')->menu_lang();
+    }
+}
+
 if (!function_exists('images')) {
     function images($tag = null)
     {
