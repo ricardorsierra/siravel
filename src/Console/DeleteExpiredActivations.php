@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Sitec\Siravel\Console;
 
 use App\Logic\Activation\ActivationRepository;
 use Illuminate\Console\Command;
@@ -14,7 +14,7 @@ class DeleteExpiredActivations extends Command
      *
      * @var string
      */
-    protected $signature = 'codingo:delete-expired-activations';
+    protected $signature = 'siravel:delete-expired-activations';
 
     /**
      * The console command description.

@@ -76,11 +76,11 @@ return [
 
     'auto-translate' => true,
 
-    'default-language' => 'pt',
+    'default-language' => 'pt-BR',
 
     'languages' => [
-        'en' => 'english',
-        'pt' => 'portuguese',
+        'en-US' => 'english',
+        'pt-BR' => 'portuguese',
     ],
 
     /*
