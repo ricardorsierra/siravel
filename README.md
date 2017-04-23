@@ -94,8 +94,12 @@ php artisan migrate
 ```php
 'siravel' => \App\Http\Middleware\Siravel::class,
 'siravel-api' => \App\Http\Middleware\SiravelApi::class,
-'siravel-language' => \App\Http\Middleware\SiravelLanguage::class,
 'siravel-analytics' => \Sitec\Siravel\Middleware\SiravelAnalytics::class,
+```
+
+* Then add to the middlewareGroups web:
+```php
+'siravel-language' => \App\Http\Middleware\SiravelLanguage::class,
 ```
 
 In order to have modules load as well please add the following to your composer file under autoload psr-4 object:
