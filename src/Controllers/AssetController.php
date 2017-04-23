@@ -171,8 +171,7 @@ class AssetController extends SiravelController
     public function asset($encPath, $contentType, Filesystem $fileSystem)
     {
         try {
-            $path = CryptoServiceFacade::url_decode($encPath);
-
+            $path = str_replace('%3F', '?', CryptoServiceFacade::url_decode($encPath));
 
             // Caso exista no recurso do usuário usa ele, verifica se no path do usuário existe
             $filePath = resource_path().DIRECTORY_SEPARATOR.'assets'.DIRECTORY_SEPARATOR.$path;

@@ -13,7 +13,6 @@ class PagesController extends SiravelController
 
     public function getHome(\Illuminate\Http\Request $request)
     {
-
         return view('pages.home');
 
     }
