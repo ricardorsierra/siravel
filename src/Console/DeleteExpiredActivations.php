@@ -2,7 +2,7 @@
 
 namespace Sitec\Siravel\Console;
 
-use App\Logic\Activation\ActivationRepository;
+use Sitec\Siravel\Logic\Activation\ActivationRepository;
 use Illuminate\Console\Command;
 
 class DeleteExpiredActivations extends Command
