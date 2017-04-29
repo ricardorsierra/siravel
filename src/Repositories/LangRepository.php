@@ -46,6 +46,51 @@ class LangRepository
     }
 
     /**
+     * @param  mixed  $locale (optional)
+     * @param  string $column (optional)
+     * @param  string $inLocale (optional)
+     * @return array
+     */
+    public static function get($locale = null, $column = null, $inLocale = self::DEFAULT_LOCALE)
+    {
+        $allLocale = self::getLocale();
+
+        if ($locale) {
+            $locale = (array) $locale;
+            foreach ($locale as $value) {
+                $bestLocale[] = \Locale::lookup($allLocale, $value, false, self::getDefaultLocale());
+            }
+            $allLocale = $bestLocale;
+        }
+
+        return self::configure($allLocale, $column, $inLocale);
+    }
+
+    /**
+     * @param array  $locale
+     * @param string $column
+     * @param string $inLocale
+     */
+    protected static function configure($locale, $column, $inLocale)
+    {
+        foreach ($locale as $key) {
+            $configured[$key] = [
+                'locale' => $key,
+                'name' => utf8_decode(\Locale::getDisplayName($key, $inLocale)),
+                'region' => utf8_decode(\Locale::getDisplayRegion($key, $inLocale)),
+                'language' => utf8_decode(\Locale::getDisplayLanguage($key, $inLocale)),
+                'class' => 'flag-icon flag-icon-' . strtolower(\Locale::getRegion($key))
+            ];
+        }
+
+        if ($column) {
+            return array_column($configured, $column, 'locale');
+        }
+
+        return $configured;
+    }
+
+    /**
      * @return array
      */
     public static function getCurrent()
@@ -73,50 +118,25 @@ class LangRepository
         return current(self::all(self::getDefaultLocale()));
     }
 
-
-
     /**
-     * @param array  $locale
-     * @param string $column
-     * @param string $inLocale
+     * @param  string $language
+     * @return bool
      */
-    protected static function configure($locale, $column, $inLocale)
+    public static function updateCookie($language)
     {
-        foreach ($locale as $key) {
-            $configured[$key] = [
-                'locale' => $key,
-                'name' => utf8_decode(\Locale::getDisplayName($key, $inLocale)),
-                'region' => utf8_decode(\Locale::getDisplayRegion($key, $inLocale)),
-                'language' => utf8_decode(\Locale::getDisplayLanguage($key, $inLocale)),
-                'class' => 'flag-icon flag-icon-' . strtolower(\Locale::getRegion($key))
-            ];
-        }
-
-        if ($column) {
-            return array_column($configured, $column, 'locale');
-        }
-
-        return $configured;
+        return (!self::getCookie()) ?: self::setCookie($language);
     }
 
     /**
-     * @param  mixed  $locale (optional)
-     * @param  string $column (optional)
-     * @param  string $inLocale (optional)
-     * @return array
+     * @return bool
      */
-    public static function get($locale = null, $column = null, $inLocale = self::DEFAULT_LOCALE)
+    public static function getCookie()
     {
-        $allLocale = self::getLocale();
-
-        if ($locale) {
-            $locale = (array) $locale;
-            foreach ($locale as $value) {
-                $bestLocale[] = \Locale::lookup($allLocale, $value, false, self::getDefaultLocale());
-            }
-            $allLocale = $bestLocale;
+        if (empty($_COOKIE[self::COOKIENAME])) {
+            return false;
         }
 
-        return self::configure($allLocale, $column, $inLocale);
+        return $_COOKIE[self::COOKIENAME];
     }
+
 }

@@ -16,7 +16,9 @@ use Siravel;
 use Spatie\LaravelAnalytics\LaravelAnalyticsFacade;
 use Spatie\LaravelAnalytics\LaravelAnalyticsServiceProvider;
 use Sitec\Laracogs\LaracogsProvider;
+use Sitec\Siravel\Console\DeleteExpiredActivations;
 use Sitec\Siravel\Console\Keys;
+use Sitec\Siravel\Console\LangTranslate;
 use Sitec\Siravel\Console\ModuleComposer;
 use Sitec\Siravel\Console\ModuleCrud;
 use Sitec\Siravel\Console\ModuleMake;
@@ -201,7 +203,9 @@ class SiravelProvider extends ServiceProvider
             ModuleComposer::class,
             ModuleCrud::class,
             Setup::class,
+            LangTranslate::class,
             Keys::class,
+            DeleteExpiredActivations::class,
         ]);
     }
 }

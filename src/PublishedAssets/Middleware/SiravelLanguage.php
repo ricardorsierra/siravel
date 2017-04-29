@@ -17,23 +17,10 @@ class SiravelLanguage
      */
     public function handle($request, Closure $next)
     {
-        if (session('language')!==null) {
-            Config::set('app.locale', session('language'));
+        if ($request->session()->has('language')) {
+            Config::set('app.locale', $request->session()->get('language'));
+            app()->setLocale($request->session()->get('language'));
         }
-        /**
-         * if(!Session::has('locale'))
-        {
-        Session::put('locale', $request->getPreferredLanguage($this->languages));
-        }
-
-        app()->setLocale(Session::get('locale'));
-
-        if(!Session::has('statut'))
-        {
-        Session::put('statut', Auth::check() ?  Auth::user()->role->slug : 'visitor');
-        }
-
-         */
 
         return $next($request);
     }

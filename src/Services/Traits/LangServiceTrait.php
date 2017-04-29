@@ -38,6 +38,7 @@ trait LangServiceTrait
             if ($lang['locale'] !== $current['locale']) {
                 $response .= '<a href="'.url('sitec/language/set/'.$lang['locale']).'"><span class="no-translation menu-item '.$lang['class'].'"></span></a>';
             }
+            $response .= '<li class=\'no-translation menu-item\'><a href=\''.url('sitec/language/set/'.$link['locale']).'\'><span class="flag-icon '.$link['class'].'"></span></a></li>';
         }
 
         $response .= '</ul></li>';

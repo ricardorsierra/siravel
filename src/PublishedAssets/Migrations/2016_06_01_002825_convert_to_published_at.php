@@ -10,19 +10,11 @@ class ConvertToPublishedAt extends Migration
      */
     public function up()
     {
-        Schema::table(config('siravel.db-prefix', '').'pages', function (Blueprint $table) {
-            $table->dateTime('published_at')->nullable();
-        });
-
         Schema::table(config('siravel.db-prefix', '').'blogs', function (Blueprint $table) {
             $table->dateTime('published_at')->nullable();
         });
 
         Schema::table(config('siravel.db-prefix', '').'events', function (Blueprint $table) {
-            $table->dateTime('published_at')->nullable();
-        });
-
-        Schema::table(config('siravel.db-prefix', '').'faqs', function (Blueprint $table) {
             $table->dateTime('published_at')->nullable();
         });
     }
@@ -32,19 +24,11 @@ class ConvertToPublishedAt extends Migration
      */
     public function down()
     {
-        Schema::table(config('siravel.db-prefix', '').'pages', function ($table) {
-            $table->dropColumn('published_at');
-        });
-
         Schema::table(config('siravel.db-prefix', '').'blogs', function ($table) {
             $table->dropColumn('published_at');
         });
 
         Schema::table(config('siravel.db-prefix', '').'events', function ($table) {
-            $table->dropColumn('published_at');
-        });
-
-        Schema::table(config('siravel.db-prefix', '').'faqs', function ($table) {
             $table->dropColumn('published_at');
         });
     }
