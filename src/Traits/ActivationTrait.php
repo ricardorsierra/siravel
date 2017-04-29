@@ -2,8 +2,8 @@
 
 namespace Sitec\Siravel\Traits;
 
-use App\Logic\Activation\ActivationRepository;
-use App\Models\User;
+use Sitec\Siravel\Logic\Activation\ActivationRepository;
+use Sitec\Siravel\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 trait ActivationTrait

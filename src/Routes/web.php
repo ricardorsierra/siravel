@@ -78,7 +78,7 @@ Route::get('sitec/language/set/{language}', 'SiravelFeatureController@setLanguag
 Route::get('public-preview/{encFileName}', 'AssetController@asPreview');
 Route::get('public-asset/{encFileName}', 'AssetController@asPublic');
 Route::get('public-download/{encFileName}/{encRealFileName}', 'AssetController@asDownload');
-
+Route::get('asset/{path}/{contentType}', 'AssetController@asset');
 Route::group(['prefix' => 'sitec'], function () {
     Route::get('asset/{path}/{contentType}', 'AssetController@asset');
 });

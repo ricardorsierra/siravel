@@ -10,208 +10,220 @@ use Illuminate\Support\Facades\Schema;
 class LangRepository
 {
     protected $data;
+    /**
+     * @var string
+     */
+    const DEFAULT_LOCALE = 'pt-BR';
 
-    public function __construct()
+    /**
+     * @var string
+     */
+    const DEFAULT_COUNTRY = 'Brasil';
+
+    /**
+     * @var string
+     */
+    const COOKIENAME = 'language';
+
+    /**
+     * @return string
+     */
+    public static function getDefaultLocale()
     {
-        $this->data = [
-            [
+        return self::DEFAULT_LOCALE;
+    }
 
-            ],
-            [
-
-            ]
+    /**
+     * @return array
+     */
+    public static function getLocale()
+    {
+        return [
+            'pt-BR',
+            'en-US',
+            'es-CO'
         ];
     }
 
     /**
-     * Returns all Images.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @param  mixed  $locale (optional)
+     * @param  string $column (optional)
+     * @param  string $inLocale (optional)
+     * @return array
      */
-    public function all()
+    public static function get($locale = null, $column = null, $inLocale = self::DEFAULT_LOCALE)
     {
-        return Image::orderBy('created_at', 'desc')->all();
-    }
+        $allLocale = self::getLocale();
 
-    public function paginated()
-    {
-        return Image::orderBy('created_at', 'desc')->paginate(Config::get('siravel.pagination', 25));
-    }
-
-    public function publishedAndPaginated()
-    {
-        return Image::orderBy('created_at', 'desc')->where('is_published', 1)->paginate(Config::get('siravel.pagination', 25));
-    }
-
-    public function published()
-    {
-        return Image::where('is_published', 1)->orderBy('created_at', 'desc')->paginate(Config::get('siravel.pagination', 25));
-    }
-
-    /**
-     * Returns all Images for the API.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    public function apiPrepared()
-    {
-        return Image::orderBy('created_at', 'desc')->where('is_published', 1)->get();
-    }
-
-    /**
-     * Returns all Images for the API.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    public function getImagesByTag($tag = null)
-    {
-        $images = Image::orderBy('created_at', 'desc')->where('is_published', 1);
-
-        if (!is_null($tag)) {
-            $images->where('tags', 'LIKE', '%'.$tag.'%');
-        }
-
-        return $images;
-    }
-
-    /**
-     * Returns all Images tags.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    public function allLangs()
-    {
-        $tags = [];
-        $images = Image::orderBy('created_at', 'desc')->where('is_published', 1)->get();
-
-        foreach ($images as $image) {
-            foreach (explode(',', $image->tags) as $tag) {
-                if ($tag > '') {
-                    array_push($tags, $tag);
-                }
+        if ($locale) {
+            $locale = (array) $locale;
+            foreach ($locale as $value) {
+                $bestLocale[] = \Locale::lookup($allLocale, $value, false, self::getDefaultLocale());
             }
+            $allLocale = $bestLocale;
         }
 
-        return array_unique($tags);
+        return self::configure($allLocale, $column, $inLocale);
     }
 
     /**
-     * Search the images.
-     *
-     * @param string $input
-     *
-     * @return Collection
+     * @param array  $locale
+     * @param string $column
+     * @param string $inLocale
      */
-    public function search($input)
+    protected static function configure($locale, $column, $inLocale)
     {
-        $query = Image::orderBy('created_at', 'desc');
-        $query->where('id', 'LIKE', '%'.$input['term'].'%');
-
-        $columns = Schema::getColumnListing('images');
-
-        foreach ($columns as $attribute) {
-            $query->orWhere($attribute, 'LIKE', '%'.$input['term'].'%');
+        foreach ($locale as $key) {
+            $configured[$key] = [
+                'locale' => $key,
+                'name' => utf8_decode(\Locale::getDisplayName($key, $inLocale)),
+                'region' => utf8_decode(\Locale::getDisplayRegion($key, $inLocale)),
+                'language' => utf8_decode(\Locale::getDisplayLanguage($key, $inLocale)),
+                'class' => 'flag-icon flag-icon-' . strtolower(\Locale::getRegion($key))
+            ];
         }
 
-        return [$query, $input['term'], $query->paginate(Config::get('siravel.pagination', 25))->render()];
+        if ($column) {
+            return array_column($configured, $column, 'locale');
+        }
+
+        return $configured;
     }
 
     /**
-     * Stores Images into database.
-     *
-     * @param array $input
-     *
-     * @return Images
+     * @return array
      */
-    public function apiStore($input)
+    public static function getCurrent()
     {
-        $savedFile = FileService::saveClone($input['location'], 'public/images');
+        return current(self::get(app()->getLocale()));
 
-        if (!$savedFile) {
+//        if ($request->session()->has('language')) {
+//            Config::set('app.locale', $request->session()->get('language'));
+//            app()->setLocale($request->session()->get('language'));
+//        }
+        if ($cookieLocale = self::getCookie()) {
+            return current(self::get($cookieLocale));
+        }
+
+        if (!empty(Yii::app()->user->model()->language)) {
+            $userLocale = Yii::app()->user->model()->language;
+            return current(self::get($userLocale));
+        }
+
+        if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            $browserLocale = \Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+            return current(self::get($browserLocale));
+        }
+
+        return current(self::get(self::getDefaultLocale()));
+    }
+
+    /**
+     * @param  string $language
+     * @return bool
+     */
+    public static function updateCookie($language)
+    {
+        return (!self::getCookie()) ?: self::setCookie($language);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function getCookie()
+    {
+        if (empty($_COOKIE[self::COOKIENAME])) {
             return false;
         }
 
-        $input['is_published'] = 1;
-        $input['location'] = $savedFile['name'];
-        $input['storage_location'] = config('siravel.storage-location');
-        $input['original_name'] = $savedFile['original'];
-
-        return Image::create($input);
+        return $_COOKIE[self::COOKIENAME];
     }
 
     /**
-     * Stores Images into database.
-     *
-     * @param array $input
-     *
-     * @return Images
+     * @param  string $language
+     * @return bool
      */
-    public function store($input)
+    public static function setCookie($language)
     {
-        $savedFile = $input['location'];
-
-        if (!$savedFile) {
-            Siravel::notification('Image could not be saved.', 'danger');
-
-            return false;
-        }
-
-        if (!isset($input['is_published'])) {
-            $input['is_published'] = 0;
-        } else {
-            $input['is_published'] = 1;
-        }
-
-        $input['location'] = CryptoService::decrypt($savedFile['name']);
-        $input['storage_location'] = config('siravel.storage-location');
-        $input['original_name'] = $savedFile['original'];
-
-        return Image::create($input);
+        $bestLocale = current(self::get($language));
+        return setcookie(self::COOKIENAME, $bestLocale['locale'], time() + (10 * 365 * 24 * 60 * 60), '/');
     }
 
     /**
-     * Find Images by given id.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Support\Collection|null|static|Images
+     * Retorna o texto de acordo com o pais aonde o sistema est� hospedado, independente da linguagem escolhida pelo usu�rio
+     * @param $configName
+     * @return mixed
      */
-    public function findImagesById($id)
+    public static function getSystemLocale($configName)
     {
-        return Image::find($id);
+        $className = self::getSystemLocaleClass();
+        require_once __DIR__ . DIRECTORY_SEPARATOR . $className . '.php';
+        return $className::getConfig($configName);
     }
 
     /**
-     * Updates Images into database.
-     *
-     * @param Images $images
-     * @param array  $input
-     *
-     * @return Images
+     * Retorna uma fun��o de acordo com o pais aonde o sistema est� hospedado, independente da linguagem escolhida pelo usu�rio
+     * @param $function
+     * @param $configName
+     * @return mixed
      */
-    public function update($images, $input)
+    public static function getSystemLocaleFunction($function, $configName)
     {
-        if (isset($input['location']) && !empty($input['location'])) {
-            $savedFile = FileService::saveFile($input['location'], 'public/images');
-
-            if (!$savedFile) {
-                Siravel::notification('Image could not be updated.', 'danger');
-
-                return false;
-            }
-
-            $input['location'] = $savedFile['name'];
-            $input['original_name'] = $savedFile['original'];
-        } else {
-            $input['location'] = $images->location;
-        }
-
-        if (!isset($input['is_published'])) {
-            $input['is_published'] = 0;
-        } else {
-            $input['is_published'] = 1;
-        }
-
-        return $images->update($input);
+        $className = self::getSystemLocaleClass();
+        return $className::getFunction($function, $configName);
     }
+
+    /**
+     * Retorna o locale daonde o sistema est� hospedado, independente da linguagem escolhida pelo usu�rio
+     * @return string
+     */
+    protected static function getSystemLocaleClass()
+    {
+        $className = 'Country'.(defined('_COUNTRY_')?_COUNTRY_:self::DEFAULT_COUNTRY);
+        if (!class_exists($className)) {
+            $className = 'Country'.self::DEFAULT_COUNTRY;
+        }
+        return $className;
+    }
+
+    /**
+     * Um helper que cria as constantes no javascript para o javascript tamb�m ter as nomenclaturas do pais aonde o
+     * sistema est� hospedado.
+     *
+     * @param bool $withTagScript
+     * @return string
+     */
+    public static function getJsSystemLocaleConstants($withTagScript=false)
+    {
+        $jsCode = '';
+        if ($withTagScript) {
+            $jsCode = '<script type="text/javascript">';
+        }
+
+        $jsCode .= self::getJsConstantsLine('CNPJ_NAME');
+        $jsCode .= self::getJsConstantsLine('CNPJ_NAME_PLURAL');
+        $jsCode .= self::getJsConstantsLine('CNPJ_MASCARA');
+        $jsCode .= self::getJsConstantsLine('MONEY');
+        $jsCode .= self::getJsConstantsLine('MONEY_PREPEND');
+
+        if ($withTagScript) {
+            $jsCode .= '</script>';
+        }
+        return $jsCode;
+    }
+
+    /**
+     * Retorna a linha com a constante definida em javascript
+     * @param $config
+     * @param bool $isString
+     */
+    protected static function getJsConstantsLine($config, $isString = true)
+    {
+        $result = self::getSystemLocale($config);
+        if ($isString) {
+            $result = '"'.$result.'"';
+        }
+        return 'const COUNTRY_LANGUAGE_'.$config.' = '.$result.';';
+    }
+
 }

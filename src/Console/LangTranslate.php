@@ -8,59 +8,79 @@
 
 namespace Sitec\Siravel\Console;
 
+use Illuminate\Console\Command;
 use Google\Cloud\Translate\TranslateClient;
 
-class LangTranslate
+class LangTranslate extends Command
 {
-    # Your Google Cloud Platform project ID
-    $projectId = 'sierratecnologiabrasil';
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $signature = 'siravel:lang';
 
-    # Instantiates a client
-    $translate = new TranslateClient(['projectId' => $projectId]);
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Siravel will translate your translates paths';
 
-    $languages = ['en-US' => 'en', 'es-ES' => 'es'];
-    foreach ($languages as $language => $target)
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
     {
-        $files = glob($language . '/*.php');
-        foreach ($files as $file)
-        {
-            echo $file."\n";
-            $messages = require ($file);
-            $fileContent = "<?php\n";
-            $fileContent .= "return [\n";
-            foreach ($messages as $originText => $destinationText)
-            {
-                $originText = str_replace("'", "\\'", ($originText));
-                if (!empty($destinationText))
-                {
-                    $fileContent .= " '
-                    {
-                    $originText
+        # Your Google Cloud Platform project ID
+        $projectId = 'sierratecnologiabrasil';
+
+        $directory = App::langPath().DIRECTORY_SEPARATOR;
+
+        # Instantiates a client
+        $translate = new TranslateClient(['projectId' => $projectId]);
+
+        $languages = ['en-US' => 'en', 'es-ES' => 'es'];
+        foreach ($languages as $language => $target) {
+            $files = glob($directory.$language . '/*.php');
+            foreach ($files as $file) {
+                echo $file . "\n";
+                $messages = require($file);
+                $fileContent = "<?php\n";
+                $fileContent .= "return [\n";
+                foreach ($messages as $originText => $destinationText) {
+                    $originText = str_replace("'", "\\'", ($originText));
+                    if (!empty($destinationText)) {
+                        $fileContent .= " '
+                        {
+                        $originText
+                        }
+    
+                        ' => '{
+                            $destinationText}',\n
+                        ";
+                        continue;
                     }
 
-                    ' => '{
-                        $destinationText}',\n
-                    ";
-                    continue;
+                    $originText = str_replace(['{', '}'], ['<', '>'], $originText);
+
+                    $translation = $translate->translate(utf8_encode($originText), [
+                        'target' => $target
+                    ]);
+                    $destinationText = str_replace(['<', '>'], ['{', '}'], utf8_decode($translation['text']));
+                    $originText = str_replace(['<', '>'], ['{', '}'], $originText);
+                    echo $originText . " - {$destinationText} \n";
+
+                    $fileContent .= " '{$originText}' => '{$destinationText}',\n";
+
                 }
-
-                $originText = str_replace(['{', '}'], ['<', '>'], $originText);
-
-                $translation = $translate->translate(utf8_encode($originText), [
-                    'target' => $target
-                ]);
-                $destinationText = str_replace(['<', '>'], ['{', '}'], utf8_decode($translation['text']));
-                $originText = str_replace(['<', '>'], ['{', '}'], $originText);
-                echo $originText . " - {$destinationText} \n";
-
-                $fileContent .= " '{$originText}' => '{$destinationText}',\n";
-
+                $fileContent .= "];\n";
+                rename($file, $file . ".bkp");
+                file_put_contents($file, $fileContent);
             }
-            $fileContent .= "];\n";
-            rename($file, $file . ".bkp");
-            file_put_contents($file, $fileContent);
         }
+
     }
-
-
 }

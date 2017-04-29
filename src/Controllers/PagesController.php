@@ -2,6 +2,8 @@
 
 namespace Sitec\Siravel\Controllers;
 
+use Illuminate\Support\Facades\App;
+
 class PagesController extends SiravelController
 {
     function __construct()
