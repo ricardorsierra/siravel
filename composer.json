@@ -20,7 +20,7 @@
         "aws/aws-sdk-php": "^3.18",
         "league/flysystem-aws-s3-v3": "^1.0",
         "graham-campbell/markdown": "^7.1",
-        "intervention/image": "^2.3",
+        "intervention/imagecache": "^2.3",
         "stichoza/google-translate-php": "^3.2",
         "donatj/phpuseragentparser": "^0.5.3",
 
@@ -36,12 +36,6 @@
         "doctrine/dbal": "~2.3",
         "amranidev/scaffold-interface": "^1.7",
 
-        "illuminate/support": "5.4.*",
-        "aws/aws-sdk-php": "^3.18",
-        "league/flysystem-aws-s3-v3": "^1.0",
-        "intervention/image": "^2.3",
-        "stichoza/google-translate-php": "^3.2",
-        "donatj/phpuseragentparser": "^0.5.3",
         "yab/crypto": "^1.0",
 
         "google/cloud": "^0.3"

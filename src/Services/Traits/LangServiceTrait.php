@@ -21,40 +21,26 @@ trait LangServiceTrait
      */
     public function menu_lang()
     {
-        $langRepo = new LangRepository();
-        $langs = $langRepo->all();
+        $langs = LangRepository::get();
 
         if (!$langs || empty($langs)) {
             return '';
         }
 
-        $links = LinkRepository::getLinksByMenuID($menu->id);
-        $response = '<li>';
-        $response = '<a href=""><span class="flag-icon flag-icon-br"></span></a>';
-        $response = '<ul class="sub-menu clearfix">';
+        $current = LangRepository::getCurrent();
 
-        $processedLinks = [];
-        foreach ($links as $link) {
-            if ($link->external) {
-                $response .= "<a href=\"$link->external_url\">$link->name</a>";
-                $processedLinks[] = "<a href=\"$link->external_url\">$link->name</a>";
-            } else {
-                $page = $pageRepo->findPagesById($link->page_id);
-                if ($page) {
-                    if (config('app.locale') == config('Siravel.default-language', $this->config('Siravel.default-language'))) {
-                        $response .= '<a href="'.URL::to('page/'.$page->url)."\">$link->name</a>";
-                        $processedLinks[] = '<a href="'.URL::to('page/'.$page->url)."\">$link->name</a>";
-                    } elseif (config('app.locale') != config('Siravel.default-language', $this->config('Siravel.default-language'))) {
-                        if ($page->translation(config('app.locale'))) {
-                            $response .= '<a href="'.URL::to('page/'.$page->translation(config('app.locale'))->data->url)."\">$link->name</a>";
-                            $processedLinks[] = '<a href="'.URL::to('page/'.$page->translation(config('app.locale'))->data->url)."\">$link->name</a>";
-                        }
-                    }
-                }
+        $response = '<li>';
+        $response .= '<a href=""><span class="'.$current['class'].'"></span></a>';
+        $response .= '<ul class="sub-menu clearfix">';
+        $response .= '<a href="'.url('sitec/language/set/'.$current['locale']).'"><span class="no-translation current-lang menu-item '.$current['class'].'"></span></a>';
+
+        foreach ($langs as $lang) {
+            if ($lang['locale'] !== $current['locale']) {
+                $response .= '<a href="'.url('sitec/language/set/'.$lang['locale']).'"><span class="no-translation menu-item '.$lang['class'].'"></span></a>';
             }
         }
 
-        $response = '</ul></li>';
+        $response .= '</ul></li>';
 
         return $response;
     }
