@@ -12,10 +12,7 @@ trait LangServiceTrait
 {
 
     /**
-     * Get a view.
-     *
-     * @param string $slug
-     * @param View   $view
+     * Return menu for translation
      *
      * @return string
      */
@@ -43,5 +40,34 @@ trait LangServiceTrait
         $response .= '</ul></li>';
 
         return $response;
+    }
+
+    /**
+     * Get a especific image for current Lang.
+     *
+     * @param string $img_path
+     *
+     * @return string
+     */
+    public function img_lang($img_path)
+    {
+        $public_path = public_path();
+
+        $current = LangRepository::getCurrent();
+        $min_lang = explode('-', $current['locale']);
+
+        $break_path = explode('.', $img_path);
+
+        $extensao = array_pop($break_path);
+
+        if (file_exists($public_path.'/'.implode('.', $break_path).'-'.$current['locale'].'.'.$extensao)) {
+            return implode('.', $break_path).'-'.$current['locale'].'.'.$extensao;
+        }
+
+        if (file_exists($public_path.'/'.implode('.', $break_path).'-'.$min_lang[0].'.'.$extensao)) {
+            return implode('.', $break_path).'-'.$min_lang[0].'.'.$extensao;
+        }
+
+        return $img_path;
     }
 }

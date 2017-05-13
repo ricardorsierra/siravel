@@ -14,6 +14,13 @@ if (!function_exists('menu_lang')) {
     }
 }
 
+if (!function_exists('img_lang')) {
+    function img_lang($img_path)
+    {
+        return app('SiravelService')->img_lang($img_path);
+    }
+}
+
 if (!function_exists('images')) {
     function images($tag = null)
     {
