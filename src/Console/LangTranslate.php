@@ -145,7 +145,7 @@ class LangTranslate extends Command
 
     /**
      * Retorna as Mensagens para Tradução do Arquivo
-     * 
+     *
      * @param $directory
      * @param $lang
      * @param $default_lang
