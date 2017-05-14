@@ -36,9 +36,8 @@
         "doctrine/dbal": "~2.3",
         "amranidev/scaffold-interface": "^1.7",
 
-        "yab/crypto": "^1.0",
+        "yab/crypto": "^1.0"
 
-        "google/cloud": "^0.3"
     },
     "require-dev": {
         "phpunit/phpunit": "~6.0",

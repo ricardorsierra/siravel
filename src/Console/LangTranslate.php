@@ -9,10 +9,18 @@
 namespace Sitec\Siravel\Console;
 
 use Illuminate\Console\Command;
-use Google\Cloud\Translate\TranslateClient;
+use Stichoza\GoogleTranslate\TranslateClient;
+use Sitec\Siravel\Repositories\LangRepository;
+use Illuminate\Support\Facades\App;
 
 class LangTranslate extends Command
 {
+
+    /**
+     * Espaçamento dos arquivos criados
+     */
+    CONST QNT_SPACES = '    ';
+
     /**
      * The console command name.
      *
@@ -27,6 +35,8 @@ class LangTranslate extends Command
      */
     protected $description = 'Siravel will translate your translates paths';
 
+    protected $defaultFiles = false;
+
     /**
      * Execute the console command.
      *
@@ -34,53 +44,259 @@ class LangTranslate extends Command
      */
     public function handle()
     {
-        # Your Google Cloud Platform project ID
-        $projectId = 'sierratecnologiabrasil';
-
         $directory = App::langPath().DIRECTORY_SEPARATOR;
 
-        # Instantiates a client
-        $translate = new TranslateClient(['projectId' => $projectId]);
-
-        $languages = ['en-US' => 'en', 'es-ES' => 'es'];
-        foreach ($languages as $language => $target) {
-            $files = glob($directory.$language . '/*.php');
-            foreach ($files as $file) {
-                echo $file . "\n";
-                $messages = require($file);
-                $fileContent = "<?php\n";
-                $fileContent .= "return [\n";
-                foreach ($messages as $originText => $destinationText) {
-                    $originText = str_replace("'", "\\'", ($originText));
-                    if (!empty($destinationText)) {
-                        $fileContent .= " '
-                        {
-                        $originText
-                        }
-    
-                        ' => '{
-                            $destinationText}',\n
-                        ";
-                        continue;
-                    }
-
-                    $originText = str_replace(['{', '}'], ['<', '>'], $originText);
-
-                    $translation = $translate->translate(utf8_encode($originText), [
-                        'target' => $target
-                    ]);
-                    $destinationText = str_replace(['<', '>'], ['{', '}'], utf8_decode($translation['text']));
-                    $originText = str_replace(['<', '>'], ['{', '}'], $originText);
-                    echo $originText . " - {$destinationText} \n";
-
-                    $fileContent .= " '{$originText}' => '{$destinationText}',\n";
-
-                }
-                $fileContent .= "];\n";
-                rename($file, $file . ".bkp");
-                file_put_contents($file, $fileContent);
-            }
+        $default_lang = LangRepository::DEFAULT_LOCALE;
+        $langs = LangRepository::get();
+        if (!$langs || empty($langs)) {
+            return '';
         }
 
+        $this->translate_dir($default_lang, $langs, $directory);
+
+    }
+
+    private function returnNameFile($fullName)
+    {
+        $nameFile = explode(DIRECTORY_SEPARATOR, $fullName);
+        $nameExplode = explode('.', array_pop($nameFile));
+        array_pop($nameExplode);
+        return implode('.', $nameExplode);
+    }
+
+    private function getDefaultFiles($default_lang, $directory)
+    {
+        if (!$this->defaultFiles) {
+            $this->defaultFiles = [];
+            $files = glob($directory . $default_lang . DIRECTORY_SEPARATOR.'*.php');
+            foreach ($files as $file) {
+                $messages = require($file);
+                $this->defaultFiles[$this->returnNameFile($file)] = $messages;
+            }
+        }
+        return $this->defaultFiles;
+    }
+
+    private function translate_dir($default_lang, $langs, $directory)
+    {
+        foreach ($langs as $lang) {
+            if ($lang['locale'] === $default_lang) {
+                continue;
+            }
+            $files = $defaultFiles = $this->getDefaultFiles($default_lang, $directory);
+            $isNewFolder = false;
+
+            $target = $lang['locale'];
+
+            # Instantiates a client
+            $translate = new TranslateClient($default_lang, $lang['locale']);
+
+            // Se nao for um diretorio cria
+            if (!is_dir($directory.$lang['locale'])) {
+                $this->cp($directory.$default_lang, $directory.$lang['locale']);
+                $isNewFolder = true;
+                $files = glob($directory.$lang['locale'] . DIRECTORY_SEPARATOR.'*.php');
+            }
+
+            foreach ($files as $indice => $file) {
+                list($saveFile, $messages, $isNewFile) = $this->getMessageForTranslateDir($directory, $lang, $default_lang, $indice, $file, $isNewFolder);
+                $fileContent = "<?php\n";
+                $fileContent .= "return [\n";
+                if ($isNewFile) {
+                    // Traduz o arquivo inteiro
+                    foreach ($messages as $chave => $texto) {
+                        $fileContent .= $this->translateArrayLine($translate, $chave, $texto);
+                    }
+                } else {
+                    // Procura o que não tem no arquivo e acrescenta
+                    foreach ($file as $chave => $texto) {
+                        if (!isset($messages[$chave]) || $messages[$chave]=='') {
+                            $fileContent .= $this->translateArrayLine($translate, $chave, $texto);
+                        } else {
+                            $fileContent .= $this->copyArrayLine($translate, $chave, $texto, $messages[$chave]);
+                        }
+                    }
+                }
+                $fileContent .= "];\n";
+                file_put_contents($saveFile, $fileContent);
+            }
+        }
+        return true;
+    }
+
+    protected function getMessageForTranslateDir($directory, $lang, $default_lang, $indice, $file, $isNewFile = false)
+    {
+        if (is_array($file)) {
+            $saveFile = $directory.$lang['locale'].DIRECTORY_SEPARATOR.$indice.'.php';
+            if (file_exists($saveFile)) {
+                echo "\n".'['.$lang['locale'].'] Verificando Mudanças no arquivo: '.$indice . ".php\n";
+                $messages = require($saveFile);
+            } else {
+                echo "\n".'['.$lang['locale'].'] Criando arquivo Traduzido: '.$indice . ".php\n";
+                copy(
+                    $directory.$default_lang.DIRECTORY_SEPARATOR.$indice.'.php',
+                    $saveFile
+                );
+                $messages = require($saveFile);
+                $isNewFile = true;
+            }
+        } else {
+            $saveFile = $file;
+            echo "\n".'['.$lang['locale'].'] Criando arquivo Traduzido: '.$file . "\n";
+            $messages = require($file);
+        }
+        return [$saveFile, $messages, $isNewFile];
+    }
+
+    /**
+     * Copia uma linha que já foi traduzida.
+     * Porém verifica se algum subindice não existe na tradução.
+     *
+     * @param $translate
+     * @param $chave
+     * @param $texto
+     * @param $message
+     * @param int $espace
+     * @return string
+     */
+    private function copyArrayLine(TranslateClient $translate, $chave, $texto, $message, $espace = 1)
+    {
+        $spacing = $this->getSpacing($espace);
+        if (is_array($texto)) {
+            $fileContent = '';
+            foreach ($texto as $chaveInterna => $textoInterno) {
+                if (!isset($message[$chaveInterna]) || $message[$chaveInterna]=='') {
+                    $fileContent .= $this->translateArrayLine($translate, $chaveInterna, $textoInterno, $espace+1);
+                } else {
+                   $fileContent .= $this->copyArrayLine($translate, $chaveInterna, $textoInterno, $message[$chaveInterna], $espace+1);
+                }
+            }
+            if ($fileContent=='') {
+                return "{$spacing}'{$chave}' => [],\n";
+            }
+            return "{$spacing}'{$chave}' => [\n{$fileContent}{$spacing}],\n";;
+        }
+        return "{$spacing}'{$this->recoverTextForTranslate($chave)}' => '{$this->recoverTextForTranslate($chave, $message)}',\n";
+    }
+
+    /**
+     * Traduz uma linha de um array
+     *
+     * @param TranslateClient $translate
+     * @param string $chave
+     * @param string $texto
+     * @param $copyFolder
+     * @param int $espace
+     * @return string
+     */
+    private function translateArrayLine(TranslateClient $translate, $chave, $texto, $espace = 1)
+    {
+        $fileContent = '';
+
+        $spacing = $this->getSpacing($espace);
+
+        if (is_array($texto)) {
+            foreach ($texto as $chaveInterna => $textoInterno) {
+                $fileContent = $this->translateArrayLine($translate, $chaveInterna, $textoInterno, $espace+1);
+            }
+            if ($fileContent=='') {
+                return "{$spacing}'{$chave}' => [],\n";
+            }
+            return "{$spacing}'{$chave}' => [\n{$fileContent}{$spacing}],\n";
+        }
+
+        $originText = $this->prepareTextForTranslate($texto);
+
+        if ($originText != '') {
+            try {
+                $translateText = $translate->translate($originText);
+            } catch (Exception $e) {
+                $translateText = $originText;
+            }
+        } else {
+            $translateText = $originText;
+        }
+
+        $destinationText = $this->recoverTextForTranslate($originText, $translateText);
+        echo "Traduzindo: ".$this->recoverTextForTranslate($originText) . " -> {$destinationText} \n";
+
+        $fileContent .= "{$spacing}'{$chave}' => '{$destinationText}',\n";
+
+        return $fileContent;
+    }
+
+    private function prepareTextForTranslate($texto)
+    {
+        $originText = str_replace(["\\'", "'"], ["'", "\\'"], ($texto));
+        return preg_replace ("~:([A-Za-z]+)~", "<$1>", $originText);
+    }
+
+    private function recoverTextForTranslate($original, $translateText = '')
+    {
+        if ($translateText!=='') {
+            $matches = [];
+            preg_match("~:([A-Za-z]+)~", $original, $matches, PREG_OFFSET_CAPTURE, 3);
+            if (!empty($matches)) {
+                dd($matches);
+            }
+        } else {
+            $translateText = $original;
+        }
+
+        return str_replace(
+            ['< ', ' >', '<', '>', "\\'", "'"],
+            [':', '', ':', '', "'", "\\'"],
+            $translateText
+        );
+    }
+
+    /**
+     * Copia uma Pasta
+     *
+     * @param $diretorio
+     * @param $destino
+     * @param bool $ver_acao
+     */
+    private function cp($diretorio, $destino, $ver_acao = false){
+        if ($destino{strlen($destino) - 1} == '/'){
+            $destino = substr($destino, 0, -1);
+        }
+        if (!is_dir($destino)){
+            if ($ver_acao){
+                echo "Criando diretorio {$destino}\n";
+            }
+            mkdir($destino, 0755);
+        }
+
+        $folder = opendir($diretorio);
+
+        while ($item = readdir($folder)){
+            if ($item == '.' || $item == '..'){
+                continue;
+            }
+            if (is_dir("{$diretorio}/{$item}")){
+                copy_dir("{$diretorio}/{$item}", "{$destino}/{$item}", $ver_acao);
+            }else{
+                if ($ver_acao){
+                    echo "Copiando {$item} para {$destino}"."\n";
+                }
+                copy("{$diretorio}/{$item}", "{$destino}/{$item}");
+            }
+        }
+    }
+
+    /**
+     * Função para fazer o indentamento das funções
+     *
+     * @param int $espace Grau de Indentamento da linha
+     * @return string
+     */
+    private function getSpacing($espace)
+    {
+        $spacing = '';
+        for ($i=0; $i<$espace; ++$i) {
+            $spacing .= self::QNT_SPACES;
+        }
+        return $spacing;
     }
 }

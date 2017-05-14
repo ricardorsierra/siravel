@@ -39,9 +39,10 @@ class LangRepository
     public static function getLocale()
     {
         return [
+            'en-GB',
+            'fr-FR',
+            'es-CO',
             'pt-BR',
-            'en-US',
-            'es-CO'
         ];
     }
 
