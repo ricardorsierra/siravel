@@ -56,6 +56,11 @@ class LangTranslate extends Command
 
     }
 
+    /**
+     * Return the name of file without extension
+     * @param $fullName
+     * @return string
+     */
     private function returnNameFile($fullName)
     {
         $nameFile = explode(DIRECTORY_SEPARATOR, $fullName);
@@ -64,6 +69,12 @@ class LangTranslate extends Command
         return implode('.', $nameExplode);
     }
 
+    /**
+     * Get the files and yours messages for verify with the new lang
+     * @param $default_lang
+     * @param $directory
+     * @return array|bool
+     */
     private function getDefaultFiles($default_lang, $directory)
     {
         if (!$this->defaultFiles) {
@@ -77,6 +88,14 @@ class LangTranslate extends Command
         return $this->defaultFiles;
     }
 
+    /**
+     * Translate a Directory
+     *
+     * @param $default_lang
+     * @param $langs
+     * @param $directory
+     * @return bool
+     */
     private function translate_dir($default_lang, $langs, $directory)
     {
         foreach ($langs as $lang) {
@@ -124,6 +143,17 @@ class LangTranslate extends Command
         return true;
     }
 
+    /**
+     * Retorna as Mensagens para Tradução do Arquivo
+     * 
+     * @param $directory
+     * @param $lang
+     * @param $default_lang
+     * @param $indice
+     * @param $file
+     * @param bool $isNewFile
+     * @return array
+     */
     protected function getMessageForTranslateDir($directory, $lang, $default_lang, $indice, $file, $isNewFile = false)
     {
         if (is_array($file)) {
@@ -176,7 +206,7 @@ class LangTranslate extends Command
             }
             return "{$spacing}'{$chave}' => [\n{$fileContent}{$spacing}],\n";;
         }
-        return "{$spacing}'{$this->recoverTextForTranslate($chave)}' => '{$this->recoverTextForTranslate($chave, $message)}',\n";
+        return "{$spacing}'{$this->recoverTextForTranslate($translate, $chave)}' => '{$this->recoverTextForTranslate($translate, $chave, $message)}',\n";
     }
 
     /**
@@ -217,35 +247,54 @@ class LangTranslate extends Command
             $translateText = $originText;
         }
 
-        $destinationText = $this->recoverTextForTranslate($originText, $translateText);
-        echo "Traduzindo: ".$this->recoverTextForTranslate($originText) . " -> {$destinationText} \n";
+        $destinationText = $this->recoverTextForTranslate($translate, $originText, $translateText);
+        echo "Traduzindo: ".$this->recoverTextForTranslate($translate, $originText) . " -> {$destinationText} \n";
 
         $fileContent .= "{$spacing}'{$chave}' => '{$destinationText}',\n";
 
         return $fileContent;
     }
 
+    /**
+     * Converte o texto para preparar para a internacionalização
+     * @param $texto
+     * @return string
+     */
     private function prepareTextForTranslate($texto)
     {
         $originText = str_replace(["\\'", "'"], ["'", "\\'"], ($texto));
-        return preg_replace ("~:([A-Za-z]+)~", "<$1>", $originText);
+        return preg_replace ("~:([A-Za-z]+)~", "<<$1>>", $originText);
     }
 
-    private function recoverTextForTranslate($original, $translateText = '')
+    /**
+     * Converte o texto para escrita no arquivo php
+     * @param TranslateClient $translate
+     * @param string $original
+     * @param string $translateText
+     * @return string
+     */
+    private function recoverTextForTranslate(TranslateClient $translate, $original, $translateText = '')
     {
         if ($translateText!=='') {
             $matches = [];
-            preg_match("~:([A-Za-z]+)~", $original, $matches, PREG_OFFSET_CAPTURE, 3);
-            if (!empty($matches)) {
-                dd($matches);
+            // Caso o google tenha traduzido os parametros, desfaz essas traduções
+            preg_match_all("~<([ A-Za-z]+)>~", $original, $matches);
+            if (!empty($matches) && (!empty($matches[0]) || !empty($matches[1]))) {
+                foreach ($matches[0] as $indice=>$valor) {
+                    if (strpos($valor, $translateText) === false) {
+                        $palavraTraduzida = $translate->translate($matches[1][$indice]);
+                        $translateText = preg_replace('/<<'.$matches[1][$indice].'>>/i', $valor, $translateText);
+                        $translateText = preg_replace('/<<'.$palavraTraduzida.'>>/i', $valor, $translateText);
+                    }
+                }
             }
         } else {
             $translateText = $original;
         }
 
         return str_replace(
-            ['< ', ' >', '<', '>', "\\'", "'"],
-            [':', '', ':', '', "'", "\\'"],
+            ['& nbsp', '& amp;', '& Laquo;', '& raquo;', '<< ', ' >>', '<<', '>>', "\\'", "'"  ],
+            ['&nbsp',  '&amp;',  '&Laquo;',  '&raquo;',  ':',   '',    ':',  '',  "'",   "\\'"],
             $translateText
         );
     }
